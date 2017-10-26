@@ -14,7 +14,7 @@ It can be included in any PHP project using [Composer](https://getcomposer.org).
 
 ```
 "require": {
-    "j0k3r\httplug-ssrf-plugin": "dev-master"
+    "j0k3r/httplug-ssrf-plugin": "dev-master"
 }
 ```
 
