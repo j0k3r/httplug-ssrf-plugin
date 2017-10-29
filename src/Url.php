@@ -13,8 +13,8 @@ class Url
     /**
      * Validates the whole URL.
      *
-     * @param $url     string
-     * @param $options Options
+     * @param string $url
+     * @param Options $options
      *
      * @throws InvalidURLException
      *
@@ -79,8 +79,8 @@ class Url
     /**
      * Validates a URL scheme.
      *
-     * @param $scheme  string
-     * @param $options Options
+     * @param string $scheme
+     * @param Options $options
      *
      * @throws InvalidSchemeException
      *
@@ -106,8 +106,8 @@ class Url
     /**
      * Validates a port.
      *
-     * @param $port    int
-     * @param $options Options
+     * @param int $port
+     * @param Options $options
      *
      * @throws InvalidPortException
      *
@@ -131,8 +131,8 @@ class Url
     /**
      * Validates a URL host.
      *
-     * @param $host    string
-     * @param $options Options
+     * @param string $host
+     * @param Options $options
      *
      * @throws InvalidDomainException
      * @throws InvalidIPException
@@ -198,7 +198,7 @@ class Url
     /**
      * Re-build a URL based on an array of parts.
      *
-     * @param $parts array
+     * @param array $parts
      *
      * @return string
      */
@@ -224,8 +224,8 @@ class Url
      * Checks a passed in IP against a CIDR.
      * See http://stackoverflow.com/questions/594112/matching-an-ip-to-a-cidr-mask-in-php5.
      *
-     * @param $ip   string
-     * @param $cidr string
+     * @param string $ip
+     * @param string $cidr
      *
      * @return bool
      */

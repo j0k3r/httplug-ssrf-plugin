@@ -7,17 +7,23 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 class Options
 {
     /**
-     * @var bool Allow credentials in a URL
+     * Allow credentials in a URL
+     *
+     * @var bool
      */
     private $sendCredentials = false;
 
     /**
-     * @var bool Pin DNS records
+     * Pin DNS records
+     *
+     * @var bool
      */
     private $pinDns = false;
 
     /**
-     * @var array blacklist ans whitelist
+     * blacklist and whitelist
+     *
+     * @var array
      */
     private $lists = [
         'whitelist' => [
@@ -122,8 +128,8 @@ class Options
     /**
      * Checks if a specific value is in a list.
      *
-     * @param $listName   'whitelist'|'blacklist'
-     * @param $type   string
+     * @param 'whitelist'|'blacklist' $listName
+     * @param string $type
      * @param $value
      *
      * @throws InvalidOptionException
@@ -159,8 +165,8 @@ class Options
     /**
      * Returns a specific list.
      *
-     * @param $listName 'whitelist'|'blacklist'
-     * @param $type string optional
+     * @param 'whitelist'|'blacklist' $listName
+     * @param string|null $type
      *
      * @throws InvalidOptionException
      *
@@ -184,9 +190,9 @@ class Options
     /**
      * Sets a list, the values must be passed as an array.
      *
-     * @param $listName   'whitelist'|'blacklist'
-     * @param $values array
-     * @param $type   string optional
+     * @param 'whitelist'|'blacklist' $listName
+     * @param array $values
+     * @param string|null $type
      *
      * @throws InvalidOptionException
      *
@@ -224,9 +230,9 @@ class Options
     /**
      * Adds a value/values to a specific list.
      *
-     * @param $listName   'whitelist'|'blacklist'
-     * @param $type   string
-     * @param $values array|string
+     * @param 'whitelist'|'blacklist' $listName
+     * @param string $type
+     * @param array|string $values
      *
      * @throws InvalidOptionException
      *
@@ -259,9 +265,9 @@ class Options
     /**
      * Removes a value/values from a specific list.
      *
-     * @param $listName   'whitelist'|'blacklist'
-     * @param $type   string
-     * @param $values array|string
+     * @param 'whitelist'|'blacklist' $listName
+     * @param string $type
+     * @param array|string $values
      *
      * @throws InvalidOptionException
      *
@@ -288,7 +294,7 @@ class Options
     }
 
     /**
-     * @param $listName 'whitelist'|'blacklist'
+     * @param 'whitelist'|'blacklist' $listName
      *
      * @throws InvalidOptionException
      */
