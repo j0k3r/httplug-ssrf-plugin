@@ -25,7 +25,6 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
     {
         $this->options = $options ?: new Options();
         $this->uriFactory = $uriFactory ?: UriFactoryDiscovery::find();
-        //TODO force using IPV4 ? @see SafeCurl::init()
     }
 
     /**
