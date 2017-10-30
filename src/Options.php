@@ -6,6 +6,12 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 
 class Options
 {
+    private static $availableType = [
+        'ip',
+        'port',
+        'domain',
+        'scheme',
+    ];
     /**
      * Allow credentials in a URL.
      *
@@ -141,7 +147,7 @@ class Options
         $this->checkListByName($listName);
 
         if (!array_key_exists($type, $this->lists[$listName])) {
-            throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
+            throw InvalidOptionException::invalidType($type, self::$availableType);
         }
 
         if (empty($this->lists[$listName][$type])) {
@@ -178,7 +184,7 @@ class Options
 
         if (null !== $type) {
             if (!array_key_exists($type, $this->lists[$listName])) {
-                throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
+                throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
             return $this->lists[$listName][$type];
@@ -203,12 +209,12 @@ class Options
         $this->checkListByName($listName);
 
         if (!is_array($values)) {
-            throw new InvalidOptionException('Provided values must be an array, "' . gettype($values) . '" given');
+            throw InvalidOptionException::invalidValues($values);
         }
 
         if (null !== $type) {
             if (!array_key_exists($type, $this->lists[$listName])) {
-                throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
+                throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
             $this->lists[$listName][$type] = $values;
@@ -217,8 +223,8 @@ class Options
         }
 
         foreach ($values as $type => $value) {
-            if (!in_array($type, ['ip', 'port', 'domain', 'scheme'], true)) {
-                throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
+            if (!in_array($type, self::$availableType, true)) {
+                throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
             $this->lists[$listName][$type] = $value;
@@ -243,11 +249,11 @@ class Options
         $this->checkListByName($listName);
 
         if (!array_key_exists($type, $this->lists[$listName])) {
-            throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
+            throw InvalidOptionException::invalidType($type, self::$availableType);
         }
 
         if (empty($values)) {
-            throw new InvalidOptionException('Provided values cannot be empty');
+            throw InvalidOptionException::emptyValues();
         }
 
         //Cast single values to an array
@@ -278,11 +284,11 @@ class Options
         $this->checkListByName($listName);
 
         if (!array_key_exists($type, $this->lists[$listName])) {
-            throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
+            throw InvalidOptionException::invalidType($type, self::$availableType);
         }
 
         if (empty($values)) {
-            throw new InvalidOptionException('Provided values cannot be empty');
+            throw InvalidOptionException::emptyValues();
         }
 
         //Cast single values to an array
@@ -301,7 +307,7 @@ class Options
     private function checkListByName($listName)
     {
         if (!isset($this->lists[$listName])) {
-            throw new InvalidOptionException('Provided list "' . $listName . '" must be "whitelist" or "blacklist"');
+            throw InvalidOptionException::invalidListName($listName);
         }
     }
 }
