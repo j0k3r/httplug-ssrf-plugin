@@ -6,19 +6,21 @@ class InvalidOptionException extends \Exception implements SsrfException
 {
     /**
      * @param string $type
-     * @param array $expectedTypes
+     * @param array  $expectedTypes
+     *
      * @return static
      */
     public static function invalidType($type, array $expectedTypes)
     {
         $expectedTypesList = '"' . implode('", "', array_slice($expectedTypes, 0, -1))
-            . '" or "' . $expectedTypes[count($expectedTypes) - 1]. '"';
+            . '" or "' . $expectedTypes[count($expectedTypes) - 1] . '"';
 
         return new static(sprintf('Provided type "%s" must be %s', $type, $expectedTypesList));
     }
 
     /**
      * @param string $listName
+     *
      * @return static
      */
     public static function invalidListName($listName)

@@ -134,8 +134,8 @@ class Options
     /**
      * Checks if a specific value is in a list.
      *
-     * @param string $listName Accepts 'whitelist' or 'blacklist
-     * @param string $type
+     * @param string     $listName Accepts 'whitelist' or 'blacklist
+     * @param string     $type
      * @param string|int $value
      *
      * @throws InvalidOptionException

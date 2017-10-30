@@ -98,8 +98,8 @@ class Url
     /**
      * Validates a port.
      *
-     * @param string|int     $port
-     * @param Options $options
+     * @param string|int $port
+     * @param Options    $options
      *
      * @throws InvalidPortException
      *
