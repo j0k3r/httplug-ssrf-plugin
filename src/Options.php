@@ -7,21 +7,21 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 class Options
 {
     /**
-     * Allow credentials in a URL
+     * Allow credentials in a URL.
      *
      * @var bool
      */
     private $sendCredentials = false;
 
     /**
-     * Pin DNS records
+     * Pin DNS records.
      *
      * @var bool
      */
     private $pinDns = false;
 
     /**
-     * blacklist and whitelist
+     * blacklist and whitelist.
      *
      * @var array
      */
@@ -129,7 +129,7 @@ class Options
      * Checks if a specific value is in a list.
      *
      * @param 'whitelist'|'blacklist' $listName
-     * @param string $type
+     * @param string                  $type
      * @param $value
      *
      * @throws InvalidOptionException
@@ -141,7 +141,7 @@ class Options
         $this->checkListByName($listName);
 
         if (!array_key_exists($type, $this->lists[$listName])) {
-            throw new InvalidOptionException('Provided type "'.$type.'" must be "ip", "port", "domain" or "scheme"');
+            throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
         }
 
         if (empty($this->lists[$listName][$type])) {
@@ -151,7 +151,7 @@ class Options
         //For domains, a regex match is needed
         if ('domain' === $type) {
             foreach ($this->lists[$listName][$type] as $domain) {
-                if (preg_match('/^'.$domain.'$/i', $value)) {
+                if (preg_match('/^' . $domain . '$/i', $value)) {
                     return true;
                 }
             }
@@ -166,7 +166,7 @@ class Options
      * Returns a specific list.
      *
      * @param 'whitelist'|'blacklist' $listName
-     * @param string|null $type
+     * @param string|null             $type
      *
      * @throws InvalidOptionException
      *
@@ -178,7 +178,7 @@ class Options
 
         if (null !== $type) {
             if (!array_key_exists($type, $this->lists[$listName])) {
-                throw new InvalidOptionException('Provided type "'.$type.'" must be "ip", "port", "domain" or "scheme"');
+                throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
             }
 
             return $this->lists[$listName][$type];
@@ -191,8 +191,8 @@ class Options
      * Sets a list, the values must be passed as an array.
      *
      * @param 'whitelist'|'blacklist' $listName
-     * @param array $values
-     * @param string|null $type
+     * @param array                   $values
+     * @param string|null             $type
      *
      * @throws InvalidOptionException
      *
@@ -203,12 +203,12 @@ class Options
         $this->checkListByName($listName);
 
         if (!is_array($values)) {
-            throw new InvalidOptionException('Provided values must be an array, "'.gettype($values).'" given');
+            throw new InvalidOptionException('Provided values must be an array, "' . gettype($values) . '" given');
         }
 
         if (null !== $type) {
             if (!array_key_exists($type, $this->lists[$listName])) {
-                throw new InvalidOptionException('Provided type "'.$type.'" must be "ip", "port", "domain" or "scheme"');
+                throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
             }
 
             $this->lists[$listName][$type] = $values;
@@ -218,7 +218,7 @@ class Options
 
         foreach ($values as $type => $value) {
             if (!in_array($type, ['ip', 'port', 'domain', 'scheme'], true)) {
-                throw new InvalidOptionException('Provided type "'.$type.'" must be "ip", "port", "domain" or "scheme"');
+                throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
             }
 
             $this->lists[$listName][$type] = $value;
@@ -231,8 +231,8 @@ class Options
      * Adds a value/values to a specific list.
      *
      * @param 'whitelist'|'blacklist' $listName
-     * @param string $type
-     * @param array|string $values
+     * @param string                  $type
+     * @param array|string            $values
      *
      * @throws InvalidOptionException
      *
@@ -243,7 +243,7 @@ class Options
         $this->checkListByName($listName);
 
         if (!array_key_exists($type, $this->lists[$listName])) {
-            throw new InvalidOptionException('Provided type "'.$type.'" must be "ip", "port", "domain" or "scheme"');
+            throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
         }
 
         if (empty($values)) {
@@ -266,8 +266,8 @@ class Options
      * Removes a value/values from a specific list.
      *
      * @param 'whitelist'|'blacklist' $listName
-     * @param string $type
-     * @param array|string $values
+     * @param string                  $type
+     * @param array|string            $values
      *
      * @throws InvalidOptionException
      *
@@ -278,7 +278,7 @@ class Options
         $this->checkListByName($listName);
 
         if (!array_key_exists($type, $this->lists[$listName])) {
-            throw new InvalidOptionException('Provided type "'.$type.'" must be "ip", "port", "domain" or "scheme"');
+            throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
         }
 
         if (empty($values)) {
@@ -301,7 +301,7 @@ class Options
     private function checkListByName($listName)
     {
         if (!isset($this->lists[$listName])) {
-            throw new InvalidOptionException('Provided list "'.$listName.'" must be "whitelist" or "blacklist"');
+            throw new InvalidOptionException('Provided list "' . $listName . '" must be "whitelist" or "blacklist"');
         }
     }
 }

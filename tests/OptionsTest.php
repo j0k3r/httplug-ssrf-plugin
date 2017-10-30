@@ -106,26 +106,26 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $list);
         $this->assertArrayHasKey(0, $list);
-        $this->assertEquals('0.0.0.0', $list[0]);
+        $this->assertSame('0.0.0.0', $list[0]);
 
         $list = $this->options->getList('whitelist', 'port');
 
         $this->assertCount(3, $list);
-        $this->assertEquals('80', $list[0]);
-        $this->assertEquals('443', $list[1]);
-        $this->assertEquals('8080', $list[2]);
+        $this->assertSame('80', $list[0]);
+        $this->assertSame('443', $list[1]);
+        $this->assertSame('8080', $list[2]);
 
         $this->options->addToList('whitelist', 'domain', '(.*)\.fin1te\.net');
         $list = $this->options->getList('whitelist', 'domain');
 
         $this->assertCount(1, $list);
-        $this->assertEquals('(.*)\.fin1te\.net', $list[0]);
+        $this->assertSame('(.*)\.fin1te\.net', $list[0]);
 
         $list = $this->options->getList('whitelist', 'scheme');
 
         $this->assertCount(2, $list);
-        $this->assertEquals('http', $list[0]);
-        $this->assertEquals('https', $list[1]);
+        $this->assertSame('http', $list[0]);
+        $this->assertSame('https', $list[1]);
     }
 
     public function testGetListBlacklistWithType()
@@ -133,25 +133,25 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $list = $this->options->getList('blacklist', 'ip');
 
         $this->assertCount(15, $list);
-        $this->assertEquals('0.0.0.0/8', $list[0]);
+        $this->assertSame('0.0.0.0/8', $list[0]);
 
         $this->options->addToList('blacklist', 'port', '8080');
         $list = $this->options->getList('blacklist', 'port');
 
         $this->assertCount(1, $list);
-        $this->assertEquals('8080', $list[0]);
+        $this->assertSame('8080', $list[0]);
 
         $this->options->addToList('blacklist', 'domain', '(.*)\.fin1te\.net');
         $list = $this->options->getList('blacklist', 'domain');
 
         $this->assertCount(1, $list);
-        $this->assertEquals('(.*)\.fin1te\.net', $list[0]);
+        $this->assertSame('(.*)\.fin1te\.net', $list[0]);
 
         $this->options->addToList('blacklist', 'scheme', 'ftp');
         $list = $this->options->getList('blacklist', 'scheme');
 
         $this->assertCount(1, $list);
-        $this->assertEquals('ftp', $list[0]);
+        $this->assertSame('ftp', $list[0]);
     }
 
     /**
@@ -176,11 +176,11 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->options->setList('whitelist', ['ip' => ['0.0.0.0']]);
 
-        $this->assertEquals(['0.0.0.0'], $this->options->getList('whitelist', 'ip'));
+        $this->assertSame(['0.0.0.0'], $this->options->getList('whitelist', 'ip'));
 
         $this->options->setList('blacklist', [22], 'port');
 
-        $this->assertEquals([22], $this->options->getList('blacklist', 'port'));
+        $this->assertSame([22], $this->options->getList('blacklist', 'port'));
     }
 
     /**
@@ -280,7 +280,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $list = $this->options->getList('blacklist', 'port');
 
         $this->assertCount(1, $list);
-        $this->assertEquals('8080', $list[0]);
+        $this->assertSame('8080', $list[0]);
 
         $this->options->removeFromList('blacklist', 'port', '8080');
         $list = $this->options->getList('blacklist', 'port');
@@ -292,7 +292,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $list = $this->options->getList('blacklist', 'scheme');
 
         $this->assertCount(1, $list);
-        $this->assertEquals('ftp', $list[0]);
+        $this->assertSame('ftp', $list[0]);
 
         $this->options->removeFromList('blacklist', 'scheme', ['ftp']);
         $list = $this->options->getList('blacklist', 'scheme');
