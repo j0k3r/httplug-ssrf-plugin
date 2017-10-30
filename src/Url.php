@@ -42,13 +42,7 @@ class Url
             throw new InvalidURLException('Credentials passed in but "sendCredentials" is set to false');
         }
 
-        //First, validate the scheme
-        if (array_key_exists('scheme', $parts)) {
-            $parts['scheme'] = self::validateScheme($parts['scheme'], $options);
-        } else {
-            //Default to http
-            $parts['scheme'] = 'http';
-        }
+        $parts['scheme'] = array_key_exists('scheme', $parts) ? self::validateScheme($parts['scheme'], $options) : 'http';
 
         //Validate the port
         if (array_key_exists('port', $parts)) {
@@ -57,13 +51,11 @@ class Url
 
         //Validate the host
         $host = self::validateHost($parts['host'], $options);
+        $parts['host'] = $host['host'];
         if ($options->getPinDns()) {
             //Since we're pinning DNS, we replace the host in the URL
             //with an IP, then get cURL to send the Host header
             $parts['host'] = $host['ips'][0];
-        } else {
-            //Not pinning DNS, so just use the host
-            $parts['host'] = $host['host'];
         }
 
         //Rebuild the URL
