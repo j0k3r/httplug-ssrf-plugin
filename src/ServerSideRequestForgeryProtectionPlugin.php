@@ -30,7 +30,7 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
     /**
      * {@inheritdoc}
      *
-     * @throws \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\SsrfException
+     * @throws \Http\Client\Exception\RequestException
      */
     public function handleRequest(RequestInterface $request, callable $next, callable $first)
     {
