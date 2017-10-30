@@ -128,9 +128,9 @@ class Options
     /**
      * Checks if a specific value is in a list.
      *
-     * @param 'whitelist'|'blacklist' $listName
-     * @param string                  $type
-     * @param $value
+     * @param string $listName Accepts 'whitelist' or 'blacklist
+     * @param string $type
+     * @param string|int $value
      *
      * @throws InvalidOptionException
      *
@@ -165,8 +165,8 @@ class Options
     /**
      * Returns a specific list.
      *
-     * @param 'whitelist'|'blacklist' $listName
-     * @param string|null             $type
+     * @param string      $listName Accepts 'whitelist' or 'blacklist
+     * @param string|null $type
      *
      * @throws InvalidOptionException
      *
@@ -190,9 +190,9 @@ class Options
     /**
      * Sets a list, the values must be passed as an array.
      *
-     * @param 'whitelist'|'blacklist' $listName
-     * @param array                   $values
-     * @param string|null             $type
+     * @param string      $listName Accepts 'whitelist' or 'blacklist
+     * @param array       $values
+     * @param string|null $type
      *
      * @throws InvalidOptionException
      *
@@ -230,9 +230,9 @@ class Options
     /**
      * Adds a value/values to a specific list.
      *
-     * @param 'whitelist'|'blacklist' $listName
-     * @param string                  $type
-     * @param array|string            $values
+     * @param string       $listName Accepts 'whitelist' or 'blacklist
+     * @param string       $type
+     * @param array|string $values
      *
      * @throws InvalidOptionException
      *
@@ -265,9 +265,9 @@ class Options
     /**
      * Removes a value/values from a specific list.
      *
-     * @param 'whitelist'|'blacklist' $listName
-     * @param string                  $type
-     * @param array|string            $values
+     * @param string       $listName Accepts 'whitelist' or 'blacklist
+     * @param string       $type
+     * @param array|string $values
      *
      * @throws InvalidOptionException
      *
@@ -294,7 +294,7 @@ class Options
     }
 
     /**
-     * @param 'whitelist'|'blacklist' $listName
+     * @param string $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
      */
