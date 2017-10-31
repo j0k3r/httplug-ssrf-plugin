@@ -21,9 +21,7 @@ matrix:
         - php: 5.5
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
         - php: 7.1
-          env: CS_FIXER=run
-        - php: 7.1
-          env: COVERAGE=run
+          env: CS_FIXER=run COVERAGE=run
 
 before_install:
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
