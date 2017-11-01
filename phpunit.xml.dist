@@ -13,17 +13,13 @@
 
     <testsuites>
         <testsuite name="Httplug SSRF plugin Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
+            <directory>./src</directory>
         </whitelist>
     </filter>
 
