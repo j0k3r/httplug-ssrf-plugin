@@ -30,6 +30,8 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit_Framework_Te
         return [
             ['http://0.0.0.0:123', 'Provided port "123" doesn\'t match whitelisted values: 80, 443, 8080'],
             ['http://127.0.0.1/server-status', 'Provided host "127.0.0.1" resolves to "127.0.0.1", which matches a blacklisted value: 127.0.0.0/8'],
+            // Obfuscating IPv4
+            ['http://0177.1/server-status', 'Provided host "0177.1" resolves to "127.0.0.1", which matches a blacklisted value: 127.0.0.0/8'],
             ['file:///etc/passwd', 'Provided URL "file:///etc/passwd" doesn\'t contain a hostname'],
             ['ssh://localhost', 'Provided scheme "ssh" doesn\'t match whitelisted values: http, https'],
             ['gopher://localhost', 'Provided scheme "gopher" doesn\'t match whitelisted values: http, https'],
