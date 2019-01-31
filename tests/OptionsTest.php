@@ -4,7 +4,7 @@ namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     private $options;
 

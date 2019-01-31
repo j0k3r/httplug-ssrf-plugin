@@ -165,7 +165,7 @@ class Options
             return false;
         }
 
-        return in_array($value, $this->lists[$listName][$type], true);
+        return \in_array($value, $this->lists[$listName][$type], true);
     }
 
     /**
@@ -208,7 +208,7 @@ class Options
     {
         $this->checkListByName($listName);
 
-        if (!is_array($values)) {
+        if (!\is_array($values)) {
             throw InvalidOptionException::invalidValues($values);
         }
 
@@ -223,7 +223,7 @@ class Options
         }
 
         foreach ($values as $type => $value) {
-            if (!in_array($type, self::$availableType, true)) {
+            if (!\in_array($type, self::$availableType, true)) {
                 throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
@@ -260,7 +260,7 @@ class Options
         $values = (array) $values;
 
         foreach ($values as $value) {
-            if (!in_array($value, $this->lists[$listName][$type], true)) {
+            if (!\in_array($value, $this->lists[$listName][$type], true)) {
                 $this->lists[$listName][$type][] = $value;
             }
         }

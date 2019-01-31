@@ -2,7 +2,7 @@
 
 namespace Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception;
 
-class InvalidOptionExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidOptionExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testInvalidType()
     {
