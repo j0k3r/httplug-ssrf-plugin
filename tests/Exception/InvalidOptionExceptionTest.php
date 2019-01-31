@@ -1,6 +1,8 @@
 <?php
 
-namespace Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception;
+namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception;
+
+use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException;
 
 class InvalidOptionExceptionTest extends \PHPUnit\Framework\TestCase
 {

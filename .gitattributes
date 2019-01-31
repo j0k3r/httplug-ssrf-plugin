@@ -11,3 +11,4 @@ phpspec.yml.dist export-ignore
 phpunit.xml.dist export-ignore
 spec/            export-ignore
 tests/           export-ignore
+phpstan.neon     export-ignore

@@ -134,9 +134,9 @@ class Options
     /**
      * Checks if a specific value is in a list.
      *
-     * @param string     $listName Accepts 'whitelist' or 'blacklist
-     * @param string     $type
-     * @param string|int $value
+     * @param string $listName Accepts 'whitelist' or 'blacklist
+     * @param string $type
+     * @param string $value
      *
      * @throws InvalidOptionException
      *
@@ -145,6 +145,7 @@ class Options
     public function isInList($listName, $type, $value)
     {
         $this->checkListByName($listName);
+        $value = (string) $value;
 
         if (!array_key_exists($type, $this->lists[$listName])) {
             throw InvalidOptionException::invalidType($type, self::$availableType);

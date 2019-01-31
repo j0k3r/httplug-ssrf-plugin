@@ -50,7 +50,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public function testValidatePort()
     {
-        $this->expectException(InvalidPortException::class, 'Provided port "8080" matches a blacklisted value');
+        $this->expectException(InvalidPortException::class);
         $this->expectExceptionMessage('Provided port "8080" matches a blacklisted value');
 
         $options = new Options();
