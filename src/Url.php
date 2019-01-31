@@ -42,7 +42,11 @@ class Url
             throw new InvalidURLException('Credentials passed in but "sendCredentials" is set to false');
         }
 
-        $parts['scheme'] = array_key_exists('scheme', $parts) ? self::validateScheme($parts['scheme'], $options) : 'http';
+        if (!array_key_exists('scheme', $parts)) {
+            $parts['scheme'] = 'http';
+        }
+
+        $parts['scheme'] = self::validateScheme($parts['scheme'], $options);
 
         //Validate the port
         if (array_key_exists('port', $parts)) {
@@ -230,6 +234,6 @@ class Url
 
         list($subnet, $mask) = explode('/', $cidr);
 
-        return (ip2long($ip) & ~((1 << (32 - $mask)) - 1)) === ip2long($subnet);
+        return (ip2long($ip) & ~((1 << (32 - (int) $mask)) - 1)) === ip2long($subnet);
     }
 }

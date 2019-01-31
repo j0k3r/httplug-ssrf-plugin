@@ -10,7 +10,7 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Url;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     public function dataForValidate()
     {
@@ -31,14 +31,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateUrl($url, $exception, $message)
     {
-        $this->setExpectedException($exception, $message);
+        $this->expectException($exception);
+        $this->expectExceptionMessage($message);
 
         Url::validateUrl($url, new Options());
     }
 
     public function testValidateScheme()
     {
-        $this->setExpectedException(InvalidSchemeException::class, 'Provided scheme "http" matches a blacklisted value');
+        $this->expectException(InvalidSchemeException::class);
+        $this->expectExceptionMessage('Provided scheme "http" matches a blacklisted value');
 
         $options = new Options();
         $options->addToList('blacklist', 'scheme', 'http');
@@ -48,7 +50,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testValidatePort()
     {
-        $this->setExpectedException(InvalidPortException::class, 'Provided port "8080" matches a blacklisted value');
+        $this->expectException(InvalidPortException::class);
+        $this->expectExceptionMessage('Provided port "8080" matches a blacklisted value');
 
         $options = new Options();
         $options->addToList('blacklist', 'port', '8080');
@@ -58,10 +61,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateHostBlacklist()
     {
-        $this->setExpectedException(
-            InvalidDomainException::class,
-            'Provided host "www.fin1te.net" matches a blacklisted value'
-        );
+        $this->expectException(InvalidDomainException::class);
+        $this->expectExceptionMessage('Provided host "www.fin1te.net" matches a blacklisted value');
 
         $options = new Options();
         $options->addToList('blacklist', 'domain', '(.*)\.fin1te\.net');
@@ -71,10 +72,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateHostWhitelist()
     {
-        $this->setExpectedException(
-            InvalidDomainException::class,
-            'Provided host "www.google.fr" doesn\'t match whitelisted values: (.*)\.fin1te\.net'
-        );
+        $this->expectException(InvalidDomainException::class);
+        $this->expectExceptionMessage('Provided host "www.google.fr" doesn\'t match whitelisted values: (.*)\.fin1te\.net');
 
         $options = new Options();
         $options->addToList('whitelist', 'domain', '(.*)\.fin1te\.net');
@@ -84,10 +83,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateHostWithnoip()
     {
-        $this->setExpectedException(
-            InvalidDomainException::class,
-            'Provided host "www.youpi.boom" doesn\'t resolve to an IP address'
-        );
+        $this->expectException(InvalidDomainException::class);
+        $this->expectExceptionMessage('Provided host "www.youpi.boom" doesn\'t resolve to an IP address');
 
         $options = new Options();
 
@@ -96,10 +93,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateHostWithWhitelistIp()
     {
-        $this->setExpectedException(
-            InvalidIPException::class,
-            'Provided host "2.2.2.2" resolves to "2.2.2.2", which doesn\'t match whitelisted values: 1.1.1.1'
-        );
+        $this->expectException(InvalidIPException::class);
+        $this->expectExceptionMessage('Provided host "2.2.2.2" resolves to "2.2.2.2", which doesn\'t match whitelisted values: 1.1.1.1');
 
         $options = new Options();
         $options->addToList('whitelist', 'ip', '1.1.1.1');
@@ -123,10 +118,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateHostWithBlacklistIp()
     {
-        $this->setExpectedException(
-            InvalidIPException::class,
-            'Provided host "1.1.1.1" resolves to "1.1.1.1", which matches a blacklisted value: 1.1.1.1'
-        );
+        $this->expectException(InvalidIPException::class);
+        $this->expectExceptionMessage('Provided host "1.1.1.1" resolves to "1.1.1.1", which matches a blacklisted value: 1.1.1.1');
 
         $options = new Options();
         $options->addToList('blacklist', 'ip', '1.1.1.1');

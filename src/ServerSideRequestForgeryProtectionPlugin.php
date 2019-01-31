@@ -7,6 +7,7 @@ use Http\Client\Common\Plugin;
 use Http\Client\Exception\RequestException;
 use Http\Discovery\UriFactoryDiscovery;
 use Http\Message\UriFactory;
+use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -32,7 +33,7 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
      *
      * @throws \Http\Client\Exception\RequestException
      */
-    public function handleRequest(RequestInterface $request, callable $next, callable $first)
+    public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
         try {
             $urlData = Url::validateUrl((string) $request->getUri(), $this->options);
