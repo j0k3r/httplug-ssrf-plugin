@@ -47,7 +47,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
      */
     public function testBlockedUrl($url, $message)
     {
-        $this->expectException(RequestException::class, $message);
+        $this->expectException(RequestException::class);
         $this->expectExceptionMessage($message);
 
         $mockClient = new Client();
@@ -70,7 +70,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
      */
     public function testBlockedUrlByOptions($url, $message)
     {
-        $this->expectException(RequestException::class, $message);
+        $this->expectException(RequestException::class);
         $this->expectExceptionMessage($message);
 
         $options = new Options();
