@@ -21,14 +21,14 @@
   ],
   "require": {
     "php": "^7.1",
-    "php-http/client-common": "2.0.0-RC1",
+    "php-http/client-common": "^2.0",
     "php-http/message": "^1.7",
     "php-http/message-factory": "^1.0",
     "php-http/discovery": "^1.0"
   },
   "require-dev": {
-    "symfony/phpunit-bridge": "^3.4.19",
-    "friendsofphp/php-cs-fixer": "^2.0",
+    "symfony/phpunit-bridge": "~2.6|~3.0|~4.0",
+    "friendsofphp/php-cs-fixer": "^2.14",
     "php-http/mock-client": "^1.0",
     "php-http/guzzle6-adapter": "^2.0",
     "guzzlehttp/psr7": "^1.0",
