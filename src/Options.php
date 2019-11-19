@@ -147,7 +147,7 @@ class Options
         $this->checkListByName($listName);
         $value = (string) $value;
 
-        if (!array_key_exists($type, $this->lists[$listName])) {
+        if (!\array_key_exists($type, $this->lists[$listName])) {
             throw InvalidOptionException::invalidType($type, self::$availableType);
         }
 
@@ -184,7 +184,7 @@ class Options
         $this->checkListByName($listName);
 
         if (null !== $type) {
-            if (!array_key_exists($type, $this->lists[$listName])) {
+            if (!\array_key_exists($type, $this->lists[$listName])) {
                 throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
@@ -214,7 +214,7 @@ class Options
         }
 
         if (null !== $type) {
-            if (!array_key_exists($type, $this->lists[$listName])) {
+            if (!\array_key_exists($type, $this->lists[$listName])) {
                 throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
@@ -249,7 +249,7 @@ class Options
     {
         $this->checkListByName($listName);
 
-        if (!array_key_exists($type, $this->lists[$listName])) {
+        if (!\array_key_exists($type, $this->lists[$listName])) {
             throw InvalidOptionException::invalidType($type, self::$availableType);
         }
 
@@ -284,7 +284,7 @@ class Options
     {
         $this->checkListByName($listName);
 
-        if (!array_key_exists($type, $this->lists[$listName])) {
+        if (!\array_key_exists($type, $this->lists[$listName])) {
             throw InvalidOptionException::invalidType($type, self::$availableType);
         }
 

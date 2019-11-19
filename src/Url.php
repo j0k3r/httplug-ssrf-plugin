@@ -13,8 +13,7 @@ class Url
     /**
      * Validates the whole URL.
      *
-     * @param string  $url
-     * @param Options $options
+     * @param string $url
      *
      * @throws InvalidURLException
      *
@@ -33,23 +32,23 @@ class Url
             throw new InvalidURLException('Error parsing URL "' . $url . '"');
         }
 
-        if (!array_key_exists('host', $parts)) {
+        if (!isset($parts['host'])) {
             throw new InvalidURLException('Provided URL "' . $url . '" doesn\'t contain a hostname');
         }
 
         //If credentials are passed in, but we don't want them, raise an exception
-        if (!$options->getSendCredentials() && (array_key_exists('user', $parts) || array_key_exists('pass', $parts))) {
+        if (!$options->getSendCredentials() && (!empty($parts['user']) || !empty($parts['pass']))) {
             throw new InvalidURLException('Credentials passed in but "sendCredentials" is set to false');
         }
 
-        if (!array_key_exists('scheme', $parts)) {
+        if (!isset($parts['scheme'])) {
             $parts['scheme'] = 'http';
         }
 
         $parts['scheme'] = self::validateScheme($parts['scheme'], $options);
 
         //Validate the port
-        if (array_key_exists('port', $parts)) {
+        if (isset($parts['port'])) {
             $parts['port'] = self::validatePort($parts['port'], $options);
         }
 
@@ -75,8 +74,7 @@ class Url
     /**
      * Validates a URL scheme.
      *
-     * @param string  $scheme
-     * @param Options $options
+     * @param string $scheme
      *
      * @throws InvalidSchemeException
      *
@@ -103,7 +101,6 @@ class Url
      * Validates a port.
      *
      * @param string|int $port
-     * @param Options    $options
      *
      * @throws InvalidPortException
      *
@@ -127,8 +124,7 @@ class Url
     /**
      * Validates a URL host.
      *
-     * @param string  $host
-     * @param Options $options
+     * @param string $host
      *
      * @throws InvalidDomainException
      * @throws InvalidIPException

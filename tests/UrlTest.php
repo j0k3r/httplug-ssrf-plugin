@@ -23,6 +23,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ['ftp://domain.io', InvalidURLException\InvalidSchemeException::class, 'Provided scheme "ftp" doesn\'t match whitelisted values: http, https'],
             ['http://domain.io:22', InvalidPortException::class, 'Provided port "22" doesn\'t match whitelisted values: 80, 443, 8080'],
             ['http://login:password@google.fr:80', InvalidURLException::class, 'Credentials passed in but "sendCredentials" is set to false'],
+            ['http://login@google.io:8080', InvalidURLException::class, 'Credentials passed in but "sendCredentials" is set to false'],
         ];
     }
 

@@ -6,7 +6,6 @@ class InvalidOptionException extends \Exception implements SsrfException
 {
     /**
      * @param string $type
-     * @param array  $expectedTypes
      *
      * @return static
      */

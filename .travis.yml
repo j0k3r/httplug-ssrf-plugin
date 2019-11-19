@@ -31,7 +31,7 @@ before_script:
     - if [ "$COVERAGE" = "run" ]; then PHPUNIT_FLAGS="--coverage-clover coverage.clover"; fi;
 
 script:
-    - SYMFONY_PHPUNIT_VERSION=6.5 php vendor/bin/simple-phpunit -v $PHPUNIT_FLAGS
+    - php vendor/bin/simple-phpunit -v $PHPUNIT_FLAGS
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/phpstan analyse src tests --no-progress --level 7 ; fi;
 
