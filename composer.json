@@ -1,6 +1,7 @@
 {
   "name": "j0k3r/httplug-ssrf-plugin",
   "description": "Server-Side Request Forgery (SSRF) protection plugin for HTTPlug",
+  "type": "library",
   "license": "MIT",
   "keywords": ["ssrf", "security", "http", "httplug", "plugin"],
   "homepage": "https://github.com/j0k3r/httplug-ssrf-plugin",
