@@ -1,11 +1,18 @@
+dist: xenial
+os: linux
 language: php
+
+
+# avoid double Travis build when the PR is created on upstream
+if: |
+    type = pull_request OR \
+    branch = master
 
 cache:
     directories:
-        - $HOME/.composer/cache
+        - $HOME/.composer/cache/files
 
 php:
-    - 7.1
     - 7.2
     - 7.3
     - 7.4
@@ -16,17 +23,17 @@ matrix:
     allow_failures:
         - php: nightly
     include:
-        - php: 7.1
+        - php: 7.2
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
         - php: 7.2
           env: CS_FIXER=run COVERAGE=run
 
 before_install:
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-    - travis_retry composer self-update
 
 install:
-    - travis_retry composer update ${COMPOSER_FLAGS} --no-progress --no-interaction
+    - composer update ${COMPOSER_FLAGS} --no-progress --no-interaction -o --no-suggest
+    - php vendor/bin/simple-phpunit install
 
 before_script:
     - if [ "$COVERAGE" = "run" ]; then PHPUNIT_FLAGS="--coverage-clover coverage.clover"; fi;
@@ -34,7 +41,7 @@ before_script:
 script:
     - php vendor/bin/simple-phpunit -v $PHPUNIT_FLAGS
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
-    - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/phpstan analyse src tests --no-progress --level 7 ; fi;
+    - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/phpstan analyse ; fi;
 
 
 after_success:

@@ -6,6 +6,7 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 
 class Options
 {
+    /** @var array */
     private static $availableType = [
         'ip',
         'port',
@@ -64,10 +65,8 @@ class Options
 
     /**
      * Get send credentials option.
-     *
-     * @return bool
      */
-    public function getSendCredentials()
+    public function getSendCredentials(): bool
     {
         return $this->sendCredentials;
     }
@@ -75,10 +74,8 @@ class Options
     /**
      * Enable sending of credenitals
      * This is potentially a security risk.
-     *
-     * @return Options
      */
-    public function enableSendCredentials()
+    public function enableSendCredentials(): self
     {
         $this->sendCredentials = true;
 
@@ -87,10 +84,8 @@ class Options
 
     /**
      * Disable sending of credentials.
-     *
-     * @return Options
      */
-    public function disableSendCredentials()
+    public function disableSendCredentials(): self
     {
         $this->sendCredentials = false;
 
@@ -99,20 +94,16 @@ class Options
 
     /**
      * Get pin DNS option.
-     *
-     * @return bool
      */
-    public function getPinDns()
+    public function getPinDns(): bool
     {
         return $this->pinDns;
     }
 
     /**
      * Enable DNS pinning.
-     *
-     * @return Options
      */
-    public function enablePinDns()
+    public function enablePinDns(): self
     {
         $this->pinDns = true;
 
@@ -121,10 +112,8 @@ class Options
 
     /**
      * Disable DNS pinning.
-     *
-     * @return Options
      */
-    public function disablePinDns()
+    public function disablePinDns(): self
     {
         $this->pinDns = false;
 
@@ -135,14 +124,10 @@ class Options
      * Checks if a specific value is in a list.
      *
      * @param string $listName Accepts 'whitelist' or 'blacklist
-     * @param string $type
-     * @param string $value
      *
      * @throws InvalidOptionException
-     *
-     * @return bool
      */
-    public function isInList($listName, $type, $value)
+    public function isInList(string $listName, string $type, string $value): bool
     {
         $this->checkListByName($listName);
         $value = (string) $value;
@@ -172,14 +157,11 @@ class Options
     /**
      * Returns a specific list.
      *
-     * @param string      $listName Accepts 'whitelist' or 'blacklist
-     * @param string|null $type
+     * @param string $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
-     *
-     * @return array
      */
-    public function getList($listName, $type = null)
+    public function getList(string $listName, string $type = null): array
     {
         $this->checkListByName($listName);
 
@@ -197,21 +179,13 @@ class Options
     /**
      * Sets a list, the values must be passed as an array.
      *
-     * @param string      $listName Accepts 'whitelist' or 'blacklist
-     * @param array       $values
-     * @param string|null $type
+     * @param string $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
-     *
-     * @return Options
      */
-    public function setList($listName, $values, $type = null)
+    public function setList(string $listName, array $values, string $type = null): self
     {
         $this->checkListByName($listName);
-
-        if (!\is_array($values)) {
-            throw InvalidOptionException::invalidValues($values);
-        }
 
         if (null !== $type) {
             if (!\array_key_exists($type, $this->lists[$listName])) {
@@ -238,14 +212,11 @@ class Options
      * Adds a value/values to a specific list.
      *
      * @param string       $listName Accepts 'whitelist' or 'blacklist
-     * @param string       $type
      * @param array|string $values
      *
      * @throws InvalidOptionException
-     *
-     * @return Options
      */
-    public function addToList($listName, $type, $values)
+    public function addToList(string $listName, string $type, $values = null): self
     {
         $this->checkListByName($listName);
 
@@ -273,14 +244,11 @@ class Options
      * Removes a value/values from a specific list.
      *
      * @param string       $listName Accepts 'whitelist' or 'blacklist
-     * @param string       $type
      * @param array|string $values
      *
      * @throws InvalidOptionException
-     *
-     * @return Options
      */
-    public function removeFromList($listName, $type, $values)
+    public function removeFromList(string $listName, string $type, $values = null): self
     {
         $this->checkListByName($listName);
 
@@ -305,7 +273,7 @@ class Options
      *
      * @throws InvalidOptionException
      */
-    private function checkListByName($listName)
+    private function checkListByName($listName): void
     {
         if (!isset($this->lists[$listName])) {
             throw InvalidOptionException::invalidListName($listName);

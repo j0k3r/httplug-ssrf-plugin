@@ -2,18 +2,20 @@
 
 namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 
+use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 
 class OptionsTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var Options */
     private $options;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->options = new Options();
     }
 
-    public function testSendCredentials()
+    public function testSendCredentials(): void
     {
         $this->assertFalse($this->options->getSendCredentials());
 
@@ -26,7 +28,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->options->getSendCredentials());
     }
 
-    public function testPinDns()
+    public function testPinDns(): void
     {
         $this->assertFalse($this->options->getPinDns());
 
@@ -39,7 +41,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->options->getPinDns());
     }
 
-    public function testInListEmptyValue()
+    public function testInListEmptyValue(): void
     {
         $this->assertTrue($this->options->isInList('whitelist', 'ip', ''));
         $this->assertFalse($this->options->isInList('whitelist', 'port', ''));
@@ -52,7 +54,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->options->isInList('blacklist', 'scheme', ''));
     }
 
-    public function testInListDomainRegex()
+    public function testInListDomainRegex(): void
     {
         $this->options->addToList('whitelist', 'domain', '(.*)\.fin1te\.net');
 
@@ -62,25 +64,23 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->options->isInList('whitelist', 'domain', 'www.fin1te.net'));
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
-    public function testInListBadList()
+    public function testInListBadList(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->isInList('noo', 'domain', '');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
-    public function testInListBadType()
+    public function testInListBadType(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->isInList('whitelist', 'noo', '');
     }
 
-    public function testGetListWithoutType()
+    public function testGetListWithoutType(): void
     {
         $list = $this->options->getList('whitelist');
 
@@ -99,7 +99,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('scheme', $list);
     }
 
-    public function testGetListWhitelistWithType()
+    public function testGetListWhitelistWithType(): void
     {
         $this->options->addToList('whitelist', 'ip', '0.0.0.0');
         $list = $this->options->getList('whitelist', 'ip');
@@ -128,7 +128,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('https', $list[1]);
     }
 
-    public function testGetListBlacklistWithType()
+    public function testGetListBlacklistWithType(): void
     {
         $list = $this->options->getList('blacklist', 'ip');
 
@@ -154,25 +154,23 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('ftp', $list[0]);
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
-    public function testGetListBadList()
+    public function testGetListBadList(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->getList('noo');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
-    public function testGetListBadType()
+    public function testGetListBadType(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->getList('whitelist', 'noo');
     }
 
-    public function testSetList()
+    public function testSetList(): void
     {
         $this->options->setList('whitelist', ['ip' => ['0.0.0.0']]);
 
@@ -183,97 +181,79 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([22], $this->options->getList('blacklist', 'port'));
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
-    public function testSetListBadList()
+    public function testSetListBadList(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->setList('noo', []);
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided values must be an array, "integer" given
-     */
-    public function testSetListBadValue()
+    public function testSetListBadType(): void
     {
-        $this->options->setList('whitelist', 12);
-    }
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
-    public function testSetListBadType()
-    {
         $this->options->setList('whitelist', [], 'noo');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
-    public function testSetListBadTypeValue()
+    public function testSetListBadTypeValue(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->setList('whitelist', ['noo' => 'oops']);
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
-    public function testAddToListBadList()
+    public function testAddToListBadList(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->addToList('noo', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
-    public function testAddToListBadType()
+    public function testAddToListBadType(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->addToList('whitelist', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided values cannot be empty
-     */
-    public function testAddToListBadValue()
+    public function testAddToListBadValue(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided values cannot be empty');
+
         $this->options->addToList('whitelist', 'ip', null);
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
-    public function testRemoveFromListBadList()
+    public function testRemoveFromListBadList(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->removeFromList('noo', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
-    public function testRemoveFromListBadType()
+    public function testRemoveFromListBadType(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->removeFromList('whitelist', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided values cannot be empty
-     */
-    public function testRemoveFromListBadValue()
+    public function testRemoveFromListBadValue(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided values cannot be empty');
+
         $this->options->removeFromList('whitelist', 'ip', null);
     }
 
-    public function testRemoveFromList()
+    public function testRemoveFromList(): void
     {
         // remove not an array
         $this->options->addToList('blacklist', 'port', '8080');

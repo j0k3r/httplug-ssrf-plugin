@@ -2,14 +2,14 @@
 
 namespace Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception;
 
-class InvalidOptionException extends \Exception implements SsrfException
+final class InvalidOptionException extends \Exception implements SsrfException
 {
     /**
      * @param string $type
      *
      * @return static
      */
-    public static function invalidType($type, array $expectedTypes)
+    public static function invalidType($type, array $expectedTypes): self
     {
         $expectedTypesList = '"' . implode('", "', \array_slice($expectedTypes, 0, -1))
             . '" or "' . $expectedTypes[\count($expectedTypes) - 1] . '"';
@@ -22,18 +22,13 @@ class InvalidOptionException extends \Exception implements SsrfException
      *
      * @return static
      */
-    public static function invalidListName($listName)
+    public static function invalidListName($listName): self
     {
         return new static(sprintf('Provided list "%s" must be "whitelist" or "blacklist"', $listName));
     }
 
-    public static function emptyValues()
+    public static function emptyValues(): self
     {
         return new static('Provided values cannot be empty');
-    }
-
-    public static function invalidValues($values)
-    {
-        return new static(sprintf('Provided values must be an array, "%s" given', \gettype($values)));
     }
 }

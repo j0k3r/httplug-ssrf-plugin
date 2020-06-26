@@ -12,10 +12,10 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Url;
 
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
-    public function dataForValidate()
+    public function dataForValidate(): array
     {
         return [
-            [null, InvalidURLException::class, 'Provided URL "" cannot be empty'],
+            ['', InvalidURLException::class, 'Provided URL "" cannot be empty'],
             ['http://user@:80', InvalidURLException::class, 'Error parsing URL "http://user@:80"'],
             ['http:///example.com/', InvalidURLException::class, 'Error parsing URL "http:///example.com/"'],
             ['http://:80', InvalidURLException::class, 'Error parsing URL "http://:80"'],
@@ -30,7 +30,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider dataForValidate
      */
-    public function testValidateUrl($url, $exception, $message)
+    public function testValidateUrl(string $url, string $exception, string $message): void
     {
         $this->expectException($exception);
         $this->expectExceptionMessage($message);
@@ -38,7 +38,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl($url, new Options());
     }
 
-    public function testValidateScheme()
+    public function testValidateScheme(): void
     {
         $this->expectException(InvalidSchemeException::class);
         $this->expectExceptionMessage('Provided scheme "http" matches a blacklisted value');
@@ -49,7 +49,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://www.fin1te.net', $options);
     }
 
-    public function testValidatePort()
+    public function testValidatePort(): void
     {
         $this->expectException(InvalidPortException::class);
         $this->expectExceptionMessage('Provided port "8080" matches a blacklisted value');
@@ -60,7 +60,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://www.fin1te.net:8080', $options);
     }
 
-    public function testValidateHostBlacklist()
+    public function testValidateHostBlacklist(): void
     {
         $this->expectException(InvalidDomainException::class);
         $this->expectExceptionMessage('Provided host "www.fin1te.net" matches a blacklisted value');
@@ -71,7 +71,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://www.fin1te.net', $options);
     }
 
-    public function testValidateHostWhitelist()
+    public function testValidateHostWhitelist(): void
     {
         $this->expectException(InvalidDomainException::class);
         $this->expectExceptionMessage('Provided host "www.google.fr" doesn\'t match whitelisted values: (.*)\.fin1te\.net');
@@ -82,7 +82,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://www.google.fr', $options);
     }
 
-    public function testValidateHostWithnoip()
+    public function testValidateHostWithnoip(): void
     {
         $this->expectException(InvalidDomainException::class);
         $this->expectExceptionMessage('Provided host "www.youpi.boom" doesn\'t resolve to an IP address');
@@ -92,7 +92,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://www.youpi.boom', $options);
     }
 
-    public function testValidateHostWithWhitelistIp()
+    public function testValidateHostWithWhitelistIp(): void
     {
         $this->expectException(InvalidIPException::class);
         $this->expectExceptionMessage('Provided host "2.2.2.2" resolves to "2.2.2.2", which doesn\'t match whitelisted values: 1.1.1.1');
@@ -103,7 +103,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://2.2.2.2', $options);
     }
 
-    public function testValidateHostWithWhitelistIpOk()
+    public function testValidateHostWithWhitelistIpOk(): void
     {
         $options = new Options();
         $options->addToList('whitelist', 'ip', '1.1.1.1');
@@ -117,7 +117,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(0, $res['ips']);
     }
 
-    public function testValidateHostWithBlacklistIp()
+    public function testValidateHostWithBlacklistIp(): void
     {
         $this->expectException(InvalidIPException::class);
         $this->expectExceptionMessage('Provided host "1.1.1.1" resolves to "1.1.1.1", which matches a blacklisted value: 1.1.1.1');
@@ -128,20 +128,20 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         Url::validateUrl('http://1.1.1.1', $options);
     }
 
-    public function testValidateUrlOk()
+    public function testValidateUrlOk(): void
     {
         $options = new Options();
         $options->enablePinDns();
 
-        $res = Url::validateUrl('http://www.fin1te.net:8080', $options);
+        $res = Url::validateUrl('https://bandito.re:8080', $options);
 
         $this->assertCount(3, $res);
         $this->assertArrayHasKey('url', $res);
         $this->assertArrayHasKey('host', $res);
         $this->assertArrayHasKey('ips', $res);
         $this->assertArrayHasKey(0, $res['ips']);
-        $this->assertSame('http://146.185.175.109:8080', $res['url']);
-        $this->assertSame('www.fin1te.net', $res['host']);
+        $this->assertSame('https://176.31.100.53:8080', $res['url']);
+        $this->assertSame('bandito.re', $res['host']);
 
         $res = Url::validateUrl('http://www.fin1te.net:8080', new Options());
 
