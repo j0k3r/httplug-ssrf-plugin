@@ -1,52 +1,53 @@
 {
-  "name": "j0k3r/httplug-ssrf-plugin",
-  "description": "Server-Side Request Forgery (SSRF) protection plugin for HTTPlug",
-  "type": "library",
-  "license": "MIT",
-  "keywords": ["ssrf", "security", "http", "httplug", "plugin"],
-  "homepage": "https://github.com/j0k3r/httplug-ssrf-plugin",
-  "authors": [
-    {
-      "name": "Jeremy Benoist",
-      "email": "jeremy.benoist@gmail.com"
+    "name": "j0k3r/httplug-ssrf-plugin",
+    "description": "Server-Side Request Forgery (SSRF) protection plugin for HTTPlug",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["ssrf", "security", "http", "httplug", "plugin"],
+    "homepage": "https://github.com/j0k3r/httplug-ssrf-plugin",
+    "authors": [
+        {
+            "name": "Jeremy Benoist",
+            "email": "jeremy.benoist@gmail.com"
+        },
+        {
+            "name": "aaa2000",
+            "email": "adev2000@gmail.com"
+        },
+        {
+            "name": "Jack W",
+            "email": "jack@fin1te.net",
+            "role": "Developer (SafeCurl original version)"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.9",
+        "php-http/client-common": "^2.0",
+        "php-http/message": "^1.7",
+        "php-http/message-factory": "^1.0.2",
+        "php-http/discovery": "^1.5"
     },
-    {
-      "name": "aaa2000",
-      "email": "adev2000@gmail.com"
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "guzzlehttp/psr7": "^1.0",
+        "php-http/guzzle6-adapter": "^2.0",
+        "php-http/mock-client": "^1.0",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan-phpunit": "^0.12",
+        "symfony/phpunit-bridge": "~5.0"
     },
-    {
-      "name": "Jack W",
-      "email": "jack@fin1te.net",
-      "role": "Developer (SafeCurl original version)"
+    "autoload": {
+        "psr-4": {
+            "Graby\\HttpClient\\Plugin\\ServerSideRequestForgeryProtection\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Graby\\HttpClient\\Plugin\\ServerSideRequestForgeryProtection\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
     }
-  ],
-  "require": {
-    "php": "^7.1",
-    "php-http/client-common": "^2.0",
-    "php-http/message": "^1.7",
-    "php-http/message-factory": "^1.0.2",
-    "php-http/discovery": "^1.5"
-  },
-  "require-dev": {
-    "symfony/phpunit-bridge": "~3.4.19|~4.0",
-    "friendsofphp/php-cs-fixer": "^2.14",
-    "php-http/mock-client": "^1.0",
-    "php-http/guzzle6-adapter": "^2.0",
-    "guzzlehttp/psr7": "^1.0",
-    "phpstan/phpstan": "^0.11",
-    "phpstan/phpstan-phpunit": "^0.11"
-  },
-  "autoload": {
-    "psr-4": {
-      "Graby\\HttpClient\\Plugin\\ServerSideRequestForgeryProtection\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\Graby\\HttpClient\\Plugin\\ServerSideRequestForgeryProtection\\": "tests/"
-    }
-  },
-  "scripts": {
-    "test": "vendor/bin/simple-phpunit"
-  }
 }

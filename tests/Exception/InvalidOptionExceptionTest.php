@@ -6,7 +6,7 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 
 class InvalidOptionExceptionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testInvalidType()
+    public function testInvalidType(): void
     {
         $exception = InvalidOptionException::invalidType('ippp', ['ip', 'port', 'domain', 'scheme']);
 

@@ -13,7 +13,7 @@ use Http\Mock\Client;
 
 class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGET()
+    public function testGet(): void
     {
         $mockClient = new Client();
         $mockClient->addResponse(new Response(200));
@@ -25,7 +25,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $this->assertSame(200, $response->getStatusCode());
     }
 
-    public function dataForBlockedUrl()
+    public function dataForBlockedUrl(): array
     {
         return [
             ['http://0.0.0.0:123', 'Provided port "123" doesn\'t match whitelisted values: 80, 443, 8080'],
@@ -45,7 +45,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
     /**
      * @dataProvider dataForBlockedUrl
      */
-    public function testBlockedUrl($url, $message)
+    public function testBlockedUrl(string $url, string $message): void
     {
         $this->expectException(RequestException::class);
         $this->expectExceptionMessage($message);
@@ -57,7 +57,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $client->sendRequest(new Request('GET', $url));
     }
 
-    public function dataForBlockedUrlByOptions()
+    public function dataForBlockedUrlByOptions(): array
     {
         return [
             ['http://login:password@google.fr', 'Credentials passed in but "sendCredentials" is set to false'],
@@ -68,7 +68,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
     /**
      * @dataProvider dataForBlockedUrlByOptions
      */
-    public function testBlockedUrlByOptions($url, $message)
+    public function testBlockedUrlByOptions(string $url, string $message): void
     {
         $this->expectException(RequestException::class);
         $this->expectExceptionMessage($message);
@@ -85,7 +85,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $client->sendRequest(new Request('GET', $url));
     }
 
-    public function testWithPinDnsEnabled()
+    public function testWithPinDnsEnabled(): void
     {
         $options = new Options();
         $options->enablePinDns();
@@ -99,7 +99,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $this->assertNotEmpty($response);
     }
 
-    public function testWithFollowLocationLeadingToABlockedUrl()
+    public function testWithFollowLocationLeadingToABlockedUrl(): void
     {
         $this->expectException(RequestException::class);
         $this->expectExceptionMessage('Provided port "123" doesn\'t match whitelisted values: 80, 443, 8080');
