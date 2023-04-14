@@ -6,8 +6,7 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 
 class Options
 {
-    /** @var array */
-    private static $availableType = [
+    private const AVAILABLE_TYPE = [
         'ip',
         'port',
         'domain',
@@ -133,7 +132,7 @@ class Options
         $value = (string) $value;
 
         if (!\array_key_exists($type, $this->lists[$listName])) {
-            throw InvalidOptionException::invalidType($type, self::$availableType);
+            throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
         }
 
         if (empty($this->lists[$listName][$type])) {
@@ -167,7 +166,7 @@ class Options
 
         if (null !== $type) {
             if (!\array_key_exists($type, $this->lists[$listName])) {
-                throw InvalidOptionException::invalidType($type, self::$availableType);
+                throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
             }
 
             return $this->lists[$listName][$type];
@@ -189,7 +188,7 @@ class Options
 
         if (null !== $type) {
             if (!\array_key_exists($type, $this->lists[$listName])) {
-                throw InvalidOptionException::invalidType($type, self::$availableType);
+                throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
             }
 
             if ('port' === $type) {
@@ -201,8 +200,8 @@ class Options
         }
 
         foreach ($values as $type => $value) {
-            if (!\in_array($type, self::$availableType, true)) {
-                throw InvalidOptionException::invalidType($type, self::$availableType);
+            if (!\in_array($type, self::AVAILABLE_TYPE, true)) {
+                throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
             }
 
             if ('port' === $type) {
@@ -227,7 +226,7 @@ class Options
         $this->checkListByName($listName);
 
         if (!\array_key_exists($type, $this->lists[$listName])) {
-            throw InvalidOptionException::invalidType($type, self::$availableType);
+            throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
         }
 
         if (empty($values)) {
@@ -263,7 +262,7 @@ class Options
         $this->checkListByName($listName);
 
         if (!\array_key_exists($type, $this->lists[$listName])) {
-            throw InvalidOptionException::invalidType($type, self::$availableType);
+            throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
         }
 
         if (empty($values)) {
