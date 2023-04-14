@@ -49,5 +49,10 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "scripts": {
+        "fix": "php-cs-fixer fix --verbose --diff",
+        "phpstan": "phpstan analyze --memory-limit 512M",
+        "test": "simple-phpunit -v"
     }
 }
