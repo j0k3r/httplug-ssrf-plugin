@@ -192,6 +192,9 @@ class Options
                 throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
+            if ('port' === $type) {
+                $values = self::ensureStringList($values);
+            }
             $this->lists[$listName][$type] = $values;
 
             return $this;
@@ -202,6 +205,9 @@ class Options
                 throw InvalidOptionException::invalidType($type, self::$availableType);
             }
 
+            if ('port' === $type) {
+                $value = self::ensureStringList($value);
+            }
             $this->lists[$listName][$type] = $value;
         }
 
@@ -211,8 +217,8 @@ class Options
     /**
      * Adds a value/values to a specific list.
      *
-     * @param string       $listName Accepts 'whitelist' or 'blacklist
-     * @param array|string $values
+     * @param string           $listName Accepts 'whitelist' or 'blacklist
+     * @param array|string|int $values
      *
      * @throws InvalidOptionException
      */
@@ -231,6 +237,10 @@ class Options
         // Cast single values to an array
         $values = (array) $values;
 
+        if ('port' === $type) {
+            $values = self::ensureStringList($values);
+        }
+
         foreach ($values as $value) {
             if (!\in_array($value, $this->lists[$listName][$type], true)) {
                 $this->lists[$listName][$type][] = $value;
@@ -243,8 +253,8 @@ class Options
     /**
      * Removes a value/values from a specific list.
      *
-     * @param string       $listName Accepts 'whitelist' or 'blacklist
-     * @param array|string $values
+     * @param string           $listName Accepts 'whitelist' or 'blacklist
+     * @param array|string|int $values
      *
      * @throws InvalidOptionException
      */
@@ -263,6 +273,10 @@ class Options
         // Cast single values to an array
         $values = (array) $values;
 
+        if ('port' === $type) {
+            $values = self::ensureStringList($values);
+        }
+
         $this->lists[$listName][$type] = array_diff($this->lists[$listName][$type], $values);
 
         return $this;
@@ -278,5 +292,27 @@ class Options
         if (!isset($this->lists[$listName])) {
             throw InvalidOptionException::invalidListName($listName);
         }
+    }
+
+    /**
+     * @param (string|int)[] $values
+     *
+     * @return string[]
+     */
+    private static function ensureStringList(array $values): array
+    {
+        $result = [];
+        foreach ($values as $value) {
+            if (\is_int($value)) {
+                $value = (string) $value;
+            }
+            if (!\is_string($value)) {
+                throw new \TypeError('Option values can only be strings or ints.');
+            }
+
+            $result[] = $value;
+        }
+
+        return $result;
     }
 }

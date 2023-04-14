@@ -135,7 +135,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(15, $list);
         $this->assertSame('0.0.0.0/8', $list[0]);
 
-        $this->options->addToList('blacklist', 'port', '8080');
+        $this->options->addToList('blacklist', 'port', 8080);
         $list = $this->options->getList('blacklist', 'port');
 
         $this->assertCount(1, $list);
@@ -178,18 +178,18 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->options->setList('blacklist', [22], 'port');
 
-        $this->assertSame([22], $this->options->getList('blacklist', 'port'));
+        $this->assertSame(['22'], $this->options->getList('blacklist', 'port'));
     }
 
     public function testSetListPreservesNonOverlapping(): void
     {
         $this->options->setList('blacklist', ['port' => [1234]]);
-        $this->assertSame([1234], $this->options->getList('blacklist', 'port'));
+        $this->assertSame(['1234'], $this->options->getList('blacklist', 'port'));
 
         $this->options->setList('blacklist', ['ip' => ['0.0.0.0']]);
         $this->assertSame(['0.0.0.0'], $this->options->getList('blacklist', 'ip'));
 
-        $this->assertSame([1234], $this->options->getList('blacklist', 'port'), 'Setting partial list should not override keys that were omitted.');
+        $this->assertSame(['1234'], $this->options->getList('blacklist', 'port'), 'Setting partial list should not override keys that were omitted.');
     }
 
     public function testSetListBadList(): void
@@ -267,13 +267,13 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     public function testRemoveFromList(): void
     {
         // remove not an array
-        $this->options->addToList('blacklist', 'port', '8080');
+        $this->options->addToList('blacklist', 'port', 8080);
         $list = $this->options->getList('blacklist', 'port');
 
         $this->assertCount(1, $list);
         $this->assertSame('8080', $list[0]);
 
-        $this->options->removeFromList('blacklist', 'port', '8080');
+        $this->options->removeFromList('blacklist', 'port', 8080);
         $list = $this->options->getList('blacklist', 'port');
 
         $this->assertCount(0, $list);
@@ -289,5 +289,20 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $list = $this->options->getList('blacklist', 'scheme');
 
         $this->assertCount(0, $list);
+    }
+
+    public function testNumericPortIsInList(): void
+    {
+        $this->options->addToList('blacklist', 'port', 8080);
+        $this->assertTrue($this->options->isInList('blacklist', 'port', '8080'));
+    }
+
+    public function testInvalidTypeCoverage(): void
+    {
+        // This would be disallowed by static analysis but code coverage complains.
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Option values can only be strings or ints.');
+
+        $this->options->addToList('blacklist', 'port', (object) ['dummy' => true]);
     }
 }
