@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception;
 
 final class InvalidOptionException extends \Exception implements SsrfException
