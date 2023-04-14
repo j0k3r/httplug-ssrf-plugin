@@ -21,21 +21,21 @@
         }
     ],
     "require": {
-        "php": ">=7.2.9",
-        "php-http/client-common": "^2.0",
-        "php-http/message": "^1.7",
-        "php-http/message-factory": "^1.0.2",
-        "php-http/discovery": "^1.5"
+        "php": ">=7.4",
+        "php-http/client-common": "^2.6",
+        "php-http/message": "^1.13",
+        "php-http/message-factory": "^1.0",
+        "php-http/discovery": "^1.15"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.16",
-        "guzzlehttp/psr7": "^1.0",
+        "guzzlehttp/psr7": "^1.9",
         "php-http/guzzle6-adapter": "^2.0",
-        "php-http/mock-client": "^1.0",
+        "php-http/mock-client": "^1.5",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-phpunit": "^1.3",
-        "symfony/phpunit-bridge": "~5.0"
+        "symfony/phpunit-bridge": "^6.2.3"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +48,11 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        }
     },
     "scripts": {
         "fix": "php-cs-fixer fix --verbose --diff",
