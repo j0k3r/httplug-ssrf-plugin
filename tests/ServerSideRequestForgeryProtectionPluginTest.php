@@ -74,8 +74,8 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $this->expectExceptionMessage($message);
 
         $options = new Options();
-        $options->addToList('blacklist', 'domain', '(.*)\.fin1te\.net');
-        $options->addToList('whitelist', 'scheme', 'ftp');
+        $options->addToList(Options::LIST_BLACKLIST, 'domain', '(.*)\.fin1te\.net');
+        $options->addToList(Options::LIST_WHITELIST, 'scheme', 'ftp');
         $options->disableSendCredentials();
 
         $mockClient = new Client();

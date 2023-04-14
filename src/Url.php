@@ -85,11 +85,11 @@ class Url
         $scheme = strtolower($scheme);
 
         // Whitelist always takes precedence over a blacklist
-        if (!$options->isInList('whitelist', 'scheme', $scheme)) {
-            throw new InvalidSchemeException('Provided scheme "' . $scheme . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList('whitelist', 'scheme')));
+        if (!$options->isInList(Options::LIST_WHITELIST, 'scheme', $scheme)) {
+            throw new InvalidSchemeException('Provided scheme "' . $scheme . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList(Options::LIST_WHITELIST, 'scheme')));
         }
 
-        if ($options->isInList('blacklist', 'scheme', $scheme)) {
+        if ($options->isInList(Options::LIST_BLACKLIST, 'scheme', $scheme)) {
             throw new InvalidSchemeException('Provided scheme "' . $scheme . '" matches a blacklisted value');
         }
 
@@ -109,11 +109,11 @@ class Url
     public static function validatePort($port, Options $options)
     {
         $port = (string) $port;
-        if (!$options->isInList('whitelist', 'port', $port)) {
-            throw new InvalidPortException('Provided port "' . $port . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList('whitelist', 'port')));
+        if (!$options->isInList(Options::LIST_WHITELIST, 'port', $port)) {
+            throw new InvalidPortException('Provided port "' . $port . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList(Options::LIST_WHITELIST, 'port')));
         }
 
-        if ($options->isInList('blacklist', 'port', $port)) {
+        if ($options->isInList(Options::LIST_BLACKLIST, 'port', $port)) {
             throw new InvalidPortException('Provided port "' . $port . '" matches a blacklisted value');
         }
 
@@ -136,11 +136,11 @@ class Url
         $host = strtolower($host);
 
         // Check the host against the domain lists
-        if (!$options->isInList('whitelist', 'domain', $host)) {
-            throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList('whitelist', 'domain')));
+        if (!$options->isInList(Options::LIST_WHITELIST, 'domain', $host)) {
+            throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList(Options::LIST_WHITELIST, 'domain')));
         }
 
-        if ($options->isInList('blacklist', 'domain', $host)) {
+        if ($options->isInList(Options::LIST_BLACKLIST, 'domain', $host)) {
             throw new InvalidDomainException('Provided host "' . $host . '" matches a blacklisted value');
         }
 
@@ -150,7 +150,7 @@ class Url
             throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t resolve to an IP address');
         }
 
-        $whitelistedIps = $options->getList('whitelist', 'ip');
+        $whitelistedIps = $options->getList(Options::LIST_WHITELIST, 'ip');
 
         if (!empty($whitelistedIps)) {
             $valid = false;
@@ -169,7 +169,7 @@ class Url
             }
         }
 
-        $blacklistedIps = $options->getList('blacklist', 'ip');
+        $blacklistedIps = $options->getList(Options::LIST_BLACKLIST, 'ip');
 
         if (!empty($blacklistedIps)) {
             foreach ($blacklistedIps as $blacklistedIp) {

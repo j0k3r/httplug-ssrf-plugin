@@ -6,6 +6,9 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\Invalid
 
 class Options
 {
+    public const LIST_WHITELIST = 'whitelist';
+    public const LIST_BLACKLIST = 'blacklist';
+
     private const AVAILABLE_TYPE = [
         'ip',
         'port',
@@ -122,7 +125,7 @@ class Options
     /**
      * Checks if a specific value is in a list.
      *
-     * @param string $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
      */
@@ -136,7 +139,7 @@ class Options
         }
 
         if (empty($this->lists[$listName][$type])) {
-            return 'whitelist' === $listName;
+            return self::LIST_WHITELIST === $listName;
         }
 
         // For domains, a regex match is needed
@@ -156,7 +159,7 @@ class Options
     /**
      * Returns a specific list.
      *
-     * @param string $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
      */
@@ -178,7 +181,7 @@ class Options
     /**
      * Sets a list, the values must be passed as an array.
      *
-     * @param string $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
      */
@@ -216,7 +219,7 @@ class Options
     /**
      * Adds a value/values to a specific list.
      *
-     * @param string           $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_*     $listName Accepts 'whitelist' or 'blacklist
      * @param array|string|int $values
      *
      * @throws InvalidOptionException
@@ -252,7 +255,7 @@ class Options
     /**
      * Removes a value/values from a specific list.
      *
-     * @param string           $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_*     $listName Accepts 'whitelist' or 'blacklist
      * @param array|string|int $values
      *
      * @throws InvalidOptionException
@@ -282,7 +285,7 @@ class Options
     }
 
     /**
-     * @param string $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
      *
      * @throws InvalidOptionException
      */

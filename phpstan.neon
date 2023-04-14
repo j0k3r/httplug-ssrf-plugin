@@ -16,3 +16,4 @@ parameters:
 
         # Tests try to pass invalid value since PHPDoc annotation cannot really enforce it.
         - '(expects array\|int\|string, object\{dummy: bool\}&stdClass given\.)'
+        - '(expects .blacklist.\|.whitelist., .noo. given\.)'

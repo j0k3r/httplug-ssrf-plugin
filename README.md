@@ -48,7 +48,7 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Client\Common\PluginClient;
 
 $options = new Options();
-$options->addToList('blacklist', 'domain', '(.*)\.example\.com');
+$options->addToList(Options::LIST_BLACKLIST, 'domain', '(.*)\.example\.com');
 
 $pluginClient = new PluginClient(
     HttpClientDiscovery::find(),
@@ -60,7 +60,7 @@ $request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.ex
 $response = $pluginClient->sendRequest($request);
 
 $options = new Options();
-$options->setList('whitelist', ['scheme' => ['https']]);
+$options->setList(Options::LIST_WHITELIST, ['scheme' => ['https']]);
 
 $pluginClient = new PluginClient(
     HttpClientDiscovery::find(),
