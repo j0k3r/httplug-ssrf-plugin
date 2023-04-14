@@ -13,13 +13,11 @@ class Url
     /**
      * Validates the whole URL.
      *
-     * @param string $url
-     *
      * @throws InvalidURLException
      *
-     * @return array
+     * @return array{url: string, host: string, ips: string[]}
      */
-    public static function validateUrl($url, Options $options)
+    public static function validateUrl(string $url, Options $options): array
     {
         if ('' === trim($url)) {
             throw new InvalidURLException('Provided URL "' . $url . '" cannot be empty');
@@ -74,13 +72,9 @@ class Url
     /**
      * Validates a URL scheme.
      *
-     * @param string $scheme
-     *
      * @throws InvalidSchemeException
-     *
-     * @return string
      */
-    public static function validateScheme($scheme, Options $options)
+    public static function validateScheme(string $scheme, Options $options): string
     {
         $scheme = strtolower($scheme);
 
@@ -103,10 +97,8 @@ class Url
      * @param string|int $port
      *
      * @throws InvalidPortException
-     *
-     * @return string
      */
-    public static function validatePort($port, Options $options)
+    public static function validatePort($port, Options $options): int
     {
         $port = (string) $port;
         if (!$options->isInList(Options::LIST_WHITELIST, Options::TYPE_PORT, $port)) {
@@ -118,20 +110,18 @@ class Url
         }
 
         // Existing value is fine
-        return $port;
+        return (int) $port;
     }
 
     /**
      * Validates a URL host.
      *
-     * @param string $host
-     *
      * @throws InvalidDomainException
      * @throws InvalidIPException
      *
-     * @return array
+     * @return array{host: string, ips: string[]}
      */
-    public static function validateHost($host, Options $options)
+    public static function validateHost(string $host, Options $options): array
     {
         $host = strtolower($host);
 
@@ -190,11 +180,9 @@ class Url
     /**
      * Re-build a URL based on an array of parts.
      *
-     * @param array $parts
-     *
-     * @return string
+     * @param array{scheme?: string, user?: string, pass?: string, host?: string, port?: int, path?: string, query?: string, fragment?: string} $parts
      */
-    public static function buildUrl($parts)
+    public static function buildUrl(array $parts): string
     {
         $url = '';
 
@@ -215,13 +203,8 @@ class Url
     /**
      * Checks a passed in IP against a CIDR.
      * See http://stackoverflow.com/questions/594112/matching-an-ip-to-a-cidr-mask-in-php5.
-     *
-     * @param string $ip
-     * @param string $cidr
-     *
-     * @return bool
      */
-    public static function cidrMatch($ip, $cidr)
+    public static function cidrMatch(string $ip, string $cidr): bool
     {
         if (false === strpos($cidr, '/')) {
             // It doesn't have a prefix, just a straight IP match
