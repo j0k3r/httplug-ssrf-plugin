@@ -25,6 +25,9 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $this->assertSame(200, $response->getStatusCode());
     }
 
+    /**
+     * @return array<array{string, string}>
+     */
     public function dataForBlockedUrl(): array
     {
         return [
@@ -57,6 +60,9 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $client->sendRequest(new Request('GET', $url));
     }
 
+    /**
+     * @return array<array{string, string}>
+     */
     public function dataForBlockedUrlByOptions(): array
     {
         return [

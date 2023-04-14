@@ -12,6 +12,9 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Url;
 
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @return array<array{string, class-string<\Exception>, string}>
+     */
     public function dataForValidate(): array
     {
         return [

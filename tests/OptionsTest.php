@@ -7,8 +7,7 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 
 class OptionsTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Options */
-    private $options;
+    private Options $options;
 
     protected function setUp(): void
     {

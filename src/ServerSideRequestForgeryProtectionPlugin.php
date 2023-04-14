@@ -20,8 +20,8 @@ use Psr\Http\Message\RequestInterface;
  */
 class ServerSideRequestForgeryProtectionPlugin implements Plugin
 {
-    private $options;
-    private $uriFactory;
+    private Options $options;
+    private UriFactory $uriFactory;
 
     public function __construct(Options $options = null, UriFactory $uriFactory = null)
     {
@@ -29,6 +29,10 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
         $this->uriFactory = $uriFactory ?: UriFactoryDiscovery::find();
     }
 
+    /**
+     * @param callable(RequestInterface): Promise $next
+     * @param callable(RequestInterface): Promise $first
+     */
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
         try {
