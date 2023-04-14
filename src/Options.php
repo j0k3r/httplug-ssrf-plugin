@@ -9,11 +9,16 @@ class Options
     public const LIST_WHITELIST = 'whitelist';
     public const LIST_BLACKLIST = 'blacklist';
 
+    public const TYPE_IP = 'ip';
+    public const TYPE_PORT = 'port';
+    public const TYPE_DOMAIN = 'domain';
+    public const TYPE_SCHEME = 'scheme';
+
     private const AVAILABLE_TYPE = [
-        'ip',
-        'port',
-        'domain',
-        'scheme',
+        self::TYPE_IP,
+        self::TYPE_PORT,
+        self::TYPE_DOMAIN,
+        self::TYPE_SCHEME,
     ];
     /**
      * Allow credentials in a URL.
@@ -126,6 +131,7 @@ class Options
      * Checks if a specific value is in a list.
      *
      * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
+     * @param self::TYPE_* $type
      *
      * @throws InvalidOptionException
      */
@@ -143,7 +149,7 @@ class Options
         }
 
         // For domains, a regex match is needed
-        if ('domain' === $type) {
+        if (self::TYPE_DOMAIN === $type) {
             foreach ($this->lists[$listName][$type] as $domain) {
                 if (preg_match('/^' . $domain . '$/i', $value)) {
                     return true;
@@ -159,7 +165,8 @@ class Options
     /**
      * Returns a specific list.
      *
-     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_*  $listName Accepts 'whitelist' or 'blacklist
+     * @param ?self::TYPE_* $type
      *
      * @throws InvalidOptionException
      */
@@ -181,11 +188,12 @@ class Options
     /**
      * Sets a list, the values must be passed as an array.
      *
-     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_*  $listName Accepts 'whitelist' or 'blacklist
+     * @param ?self::TYPE_* $type
      *
      * @throws InvalidOptionException
      */
-    public function setList(string $listName, array $values, string $type = null): self
+    public function setList(string $listName, array $values, ?string $type = null): self
     {
         $this->checkListByName($listName);
 
@@ -194,7 +202,7 @@ class Options
                 throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
             }
 
-            if ('port' === $type) {
+            if (self::TYPE_PORT === $type) {
                 $values = self::ensureStringList($values);
             }
             $this->lists[$listName][$type] = $values;
@@ -207,7 +215,7 @@ class Options
                 throw InvalidOptionException::invalidType($type, self::AVAILABLE_TYPE);
             }
 
-            if ('port' === $type) {
+            if (self::TYPE_PORT === $type) {
                 $value = self::ensureStringList($value);
             }
             $this->lists[$listName][$type] = $value;
@@ -220,6 +228,7 @@ class Options
      * Adds a value/values to a specific list.
      *
      * @param self::LIST_*     $listName Accepts 'whitelist' or 'blacklist
+     * @param self::TYPE_*     $type
      * @param array|string|int $values
      *
      * @throws InvalidOptionException
@@ -239,7 +248,7 @@ class Options
         // Cast single values to an array
         $values = (array) $values;
 
-        if ('port' === $type) {
+        if (self::TYPE_PORT === $type) {
             $values = self::ensureStringList($values);
         }
 
@@ -256,6 +265,7 @@ class Options
      * Removes a value/values from a specific list.
      *
      * @param self::LIST_*     $listName Accepts 'whitelist' or 'blacklist
+     * @param self::TYPE_*     $type
      * @param array|string|int $values
      *
      * @throws InvalidOptionException
@@ -275,7 +285,7 @@ class Options
         // Cast single values to an array
         $values = (array) $values;
 
-        if ('port' === $type) {
+        if (self::TYPE_PORT === $type) {
             $values = self::ensureStringList($values);
         }
 

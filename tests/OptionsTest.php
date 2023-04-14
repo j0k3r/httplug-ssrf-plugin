@@ -43,25 +43,25 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testInListEmptyValue(): void
     {
-        $this->assertTrue($this->options->isInList(Options::LIST_WHITELIST, 'ip', ''));
-        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, 'port', ''));
-        $this->assertTrue($this->options->isInList(Options::LIST_WHITELIST, 'domain', ''));
-        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, 'scheme', ''));
+        $this->assertTrue($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_IP, ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_PORT, ''));
+        $this->assertTrue($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_SCHEME, ''));
 
-        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, 'ip', ''));
-        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, 'port', ''));
-        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, 'domain', ''));
-        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, 'scheme', ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, Options::TYPE_IP, ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, Options::TYPE_PORT, ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, Options::TYPE_DOMAIN, ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME, ''));
     }
 
     public function testInListDomainRegex(): void
     {
-        $this->options->addToList(Options::LIST_WHITELIST, 'domain', '(.*)\.fin1te\.net');
+        $this->options->addToList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, '(.*)\.fin1te\.net');
 
-        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, 'domain', ''));
-        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, 'domain', 'fin1te.net'));
-        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, 'domain', 'superfin1te.net'));
-        $this->assertTrue($this->options->isInList(Options::LIST_WHITELIST, 'domain', 'www.fin1te.net'));
+        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, ''));
+        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, 'fin1te.net'));
+        $this->assertFalse($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, 'superfin1te.net'));
+        $this->assertTrue($this->options->isInList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, 'www.fin1te.net'));
     }
 
     public function testInListBadList(): void
@@ -85,43 +85,43 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $list = $this->options->getList(Options::LIST_WHITELIST);
 
         $this->assertCount(4, $list);
-        $this->assertArrayHasKey('ip', $list);
-        $this->assertArrayHasKey('port', $list);
-        $this->assertArrayHasKey('domain', $list);
-        $this->assertArrayHasKey('scheme', $list);
+        $this->assertArrayHasKey(Options::TYPE_IP, $list);
+        $this->assertArrayHasKey(Options::TYPE_PORT, $list);
+        $this->assertArrayHasKey(Options::TYPE_DOMAIN, $list);
+        $this->assertArrayHasKey(Options::TYPE_SCHEME, $list);
 
         $list = $this->options->getList(Options::LIST_BLACKLIST);
 
         $this->assertCount(4, $list);
-        $this->assertArrayHasKey('ip', $list);
-        $this->assertArrayHasKey('port', $list);
-        $this->assertArrayHasKey('domain', $list);
-        $this->assertArrayHasKey('scheme', $list);
+        $this->assertArrayHasKey(Options::TYPE_IP, $list);
+        $this->assertArrayHasKey(Options::TYPE_PORT, $list);
+        $this->assertArrayHasKey(Options::TYPE_DOMAIN, $list);
+        $this->assertArrayHasKey(Options::TYPE_SCHEME, $list);
     }
 
     public function testGetListWhitelistWithType(): void
     {
-        $this->options->addToList(Options::LIST_WHITELIST, 'ip', '0.0.0.0');
-        $list = $this->options->getList(Options::LIST_WHITELIST, 'ip');
+        $this->options->addToList(Options::LIST_WHITELIST, Options::TYPE_IP, '0.0.0.0');
+        $list = $this->options->getList(Options::LIST_WHITELIST, Options::TYPE_IP);
 
         $this->assertCount(1, $list);
         $this->assertArrayHasKey(0, $list);
         $this->assertSame('0.0.0.0', $list[0]);
 
-        $list = $this->options->getList(Options::LIST_WHITELIST, 'port');
+        $list = $this->options->getList(Options::LIST_WHITELIST, Options::TYPE_PORT);
 
         $this->assertCount(3, $list);
         $this->assertSame('80', $list[0]);
         $this->assertSame('443', $list[1]);
         $this->assertSame('8080', $list[2]);
 
-        $this->options->addToList(Options::LIST_WHITELIST, 'domain', '(.*)\.fin1te\.net');
-        $list = $this->options->getList(Options::LIST_WHITELIST, 'domain');
+        $this->options->addToList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, '(.*)\.fin1te\.net');
+        $list = $this->options->getList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN);
 
         $this->assertCount(1, $list);
         $this->assertSame('(.*)\.fin1te\.net', $list[0]);
 
-        $list = $this->options->getList(Options::LIST_WHITELIST, 'scheme');
+        $list = $this->options->getList(Options::LIST_WHITELIST, Options::TYPE_SCHEME);
 
         $this->assertCount(2, $list);
         $this->assertSame('http', $list[0]);
@@ -130,25 +130,25 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetListBlacklistWithType(): void
     {
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'ip');
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_IP);
 
         $this->assertCount(15, $list);
         $this->assertSame('0.0.0.0/8', $list[0]);
 
-        $this->options->addToList(Options::LIST_BLACKLIST, 'port', 8080);
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'port');
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_PORT, 8080);
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_PORT);
 
         $this->assertCount(1, $list);
         $this->assertSame('8080', $list[0]);
 
-        $this->options->addToList(Options::LIST_BLACKLIST, 'domain', '(.*)\.fin1te\.net');
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'domain');
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_DOMAIN, '(.*)\.fin1te\.net');
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_DOMAIN);
 
         $this->assertCount(1, $list);
         $this->assertSame('(.*)\.fin1te\.net', $list[0]);
 
-        $this->options->addToList(Options::LIST_BLACKLIST, 'scheme', 'ftp');
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'scheme');
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME, 'ftp');
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME);
 
         $this->assertCount(1, $list);
         $this->assertSame('ftp', $list[0]);
@@ -172,24 +172,24 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testSetList(): void
     {
-        $this->options->setList(Options::LIST_WHITELIST, ['ip' => ['0.0.0.0']]);
+        $this->options->setList(Options::LIST_WHITELIST, [Options::TYPE_IP => ['0.0.0.0']]);
 
-        $this->assertSame(['0.0.0.0'], $this->options->getList(Options::LIST_WHITELIST, 'ip'));
+        $this->assertSame(['0.0.0.0'], $this->options->getList(Options::LIST_WHITELIST, Options::TYPE_IP));
 
-        $this->options->setList(Options::LIST_BLACKLIST, [22], 'port');
+        $this->options->setList(Options::LIST_BLACKLIST, [22], Options::TYPE_PORT);
 
-        $this->assertSame(['22'], $this->options->getList(Options::LIST_BLACKLIST, 'port'));
+        $this->assertSame(['22'], $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_PORT));
     }
 
     public function testSetListPreservesNonOverlapping(): void
     {
-        $this->options->setList(Options::LIST_BLACKLIST, ['port' => [1234]]);
-        $this->assertSame(['1234'], $this->options->getList(Options::LIST_BLACKLIST, 'port'));
+        $this->options->setList(Options::LIST_BLACKLIST, [Options::TYPE_PORT => [1234]]);
+        $this->assertSame(['1234'], $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_PORT));
 
-        $this->options->setList(Options::LIST_BLACKLIST, ['ip' => ['0.0.0.0']]);
-        $this->assertSame(['0.0.0.0'], $this->options->getList(Options::LIST_BLACKLIST, 'ip'));
+        $this->options->setList(Options::LIST_BLACKLIST, [Options::TYPE_IP => ['0.0.0.0']]);
+        $this->assertSame(['0.0.0.0'], $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_IP));
 
-        $this->assertSame(['1234'], $this->options->getList(Options::LIST_BLACKLIST, 'port'), 'Setting partial list should not override keys that were omitted.');
+        $this->assertSame(['1234'], $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_PORT), 'Setting partial list should not override keys that were omitted.');
     }
 
     public function testSetListBadList(): void
@@ -237,7 +237,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidOptionException::class);
         $this->expectExceptionMessage('Provided values cannot be empty');
 
-        $this->options->addToList(Options::LIST_WHITELIST, 'ip', []);
+        $this->options->addToList(Options::LIST_WHITELIST, Options::TYPE_IP, []);
     }
 
     public function testRemoveFromListBadList(): void
@@ -261,40 +261,40 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidOptionException::class);
         $this->expectExceptionMessage('Provided values cannot be empty');
 
-        $this->options->removeFromList(Options::LIST_WHITELIST, 'ip', []);
+        $this->options->removeFromList(Options::LIST_WHITELIST, Options::TYPE_IP, []);
     }
 
     public function testRemoveFromList(): void
     {
         // remove not an array
-        $this->options->addToList(Options::LIST_BLACKLIST, 'port', 8080);
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'port');
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_PORT, 8080);
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_PORT);
 
         $this->assertCount(1, $list);
         $this->assertSame('8080', $list[0]);
 
-        $this->options->removeFromList(Options::LIST_BLACKLIST, 'port', 8080);
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'port');
+        $this->options->removeFromList(Options::LIST_BLACKLIST, Options::TYPE_PORT, 8080);
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_PORT);
 
         $this->assertCount(0, $list);
 
         // remove using an array
-        $this->options->addToList(Options::LIST_BLACKLIST, 'scheme', 'ftp');
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'scheme');
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME, 'ftp');
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME);
 
         $this->assertCount(1, $list);
         $this->assertSame('ftp', $list[0]);
 
-        $this->options->removeFromList(Options::LIST_BLACKLIST, 'scheme', ['ftp']);
-        $list = $this->options->getList(Options::LIST_BLACKLIST, 'scheme');
+        $this->options->removeFromList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME, ['ftp']);
+        $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME);
 
         $this->assertCount(0, $list);
     }
 
     public function testNumericPortIsInList(): void
     {
-        $this->options->addToList(Options::LIST_BLACKLIST, 'port', 8080);
-        $this->assertTrue($this->options->isInList(Options::LIST_BLACKLIST, 'port', '8080'));
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_PORT, 8080);
+        $this->assertTrue($this->options->isInList(Options::LIST_BLACKLIST, Options::TYPE_PORT, '8080'));
     }
 
     public function testInvalidTypeCoverage(): void
@@ -303,6 +303,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Option values can only be strings or ints.');
 
-        $this->options->addToList(Options::LIST_BLACKLIST, 'port', (object) ['dummy' => true]);
+        $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_PORT, (object) ['dummy' => true]);
     }
 }
