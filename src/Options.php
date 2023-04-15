@@ -216,7 +216,7 @@ class Options
      *
      * @throws InvalidOptionException
      */
-    public function addToList(string $listName, string $type, $values = null): self
+    public function addToList(string $listName, string $type, $values): self
     {
         $this->checkListByName($listName);
 
@@ -248,7 +248,7 @@ class Options
      *
      * @throws InvalidOptionException
      */
-    public function removeFromList(string $listName, string $type, $values = null): self
+    public function removeFromList(string $listName, string $type, $values): self
     {
         $this->checkListByName($listName);
 

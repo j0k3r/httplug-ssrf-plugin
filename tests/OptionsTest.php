@@ -226,7 +226,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidOptionException::class);
         $this->expectExceptionMessage('Provided values cannot be empty');
 
-        $this->options->addToList('whitelist', 'ip', null);
+        $this->options->addToList('whitelist', 'ip', []);
     }
 
     public function testRemoveFromListBadList(): void
@@ -250,7 +250,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidOptionException::class);
         $this->expectExceptionMessage('Provided values cannot be empty');
 
-        $this->options->removeFromList('whitelist', 'ip', null);
+        $this->options->removeFromList('whitelist', 'ip', []);
     }
 
     public function testRemoveFromList(): void
