@@ -181,6 +181,17 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([22], $this->options->getList('blacklist', 'port'));
     }
 
+    public function testSetListPreservesNonOverlapping(): void
+    {
+        $this->options->setList('blacklist', ['port' => [1234]]);
+        $this->assertSame([1234], $this->options->getList('blacklist', 'port'));
+
+        $this->options->setList('blacklist', ['ip' => ['0.0.0.0']]);
+        $this->assertSame(['0.0.0.0'], $this->options->getList('blacklist', 'ip'));
+
+        $this->assertSame([1234], $this->options->getList('blacklist', 'port'), 'Setting partial list should not override keys that were omitted.');
+    }
+
     public function testSetListBadList(): void
     {
         $this->expectException(InvalidOptionException::class);
