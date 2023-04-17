@@ -5,6 +5,7 @@ namespace Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidURLException;
 use Http\Client\Common\Plugin;
 use Http\Client\Exception\RequestException;
+use Http\Client\Promise\HttpRejectedPromise;
 use Http\Discovery\UriFactoryDiscovery;
 use Http\Message\UriFactory;
 use Http\Promise\Promise;
@@ -28,17 +29,12 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
         $this->uriFactory = $uriFactory ?: UriFactoryDiscovery::find();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Http\Client\Exception\RequestException
-     */
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
         try {
             $urlData = Url::validateUrl((string) $request->getUri(), $this->options);
         } catch (InvalidURLException $e) {
-            throw new RequestException($e->getMessage(), $request, $e);
+            return new HttpRejectedPromise(new RequestException($e->getMessage(), $request, $e));
         }
 
         $uri = $this->uriFactory->createUri($urlData['url']);

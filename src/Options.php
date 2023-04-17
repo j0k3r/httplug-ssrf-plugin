@@ -140,7 +140,7 @@ class Options
             return 'whitelist' === $listName;
         }
 
-        //For domains, a regex match is needed
+        // For domains, a regex match is needed
         if ('domain' === $type) {
             foreach ($this->lists[$listName][$type] as $domain) {
                 if (preg_match('/^' . $domain . '$/i', $value)) {
@@ -228,7 +228,7 @@ class Options
             throw InvalidOptionException::emptyValues();
         }
 
-        //Cast single values to an array
+        // Cast single values to an array
         $values = (array) $values;
 
         foreach ($values as $value) {
@@ -260,7 +260,7 @@ class Options
             throw InvalidOptionException::emptyValues();
         }
 
-        //Cast single values to an array
+        // Cast single values to an array
         $values = (array) $values;
 
         $this->lists[$listName][$type] = array_diff($this->lists[$listName][$type], $values);

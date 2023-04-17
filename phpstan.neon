@@ -4,9 +4,8 @@ parameters:
         - src
         - tests
 
-    # https://github.com/phpstan/phpstan/issues/694#issuecomment-350724288
-    autoload_files:
-        - vendor/bin/.phpunit/phpunit-8.3-0/vendor/autoload.php
+    bootstrapFiles:
+        - vendor/bin/.phpunit/phpunit/vendor/autoload.php
 
     inferPrivatePropertyTypeFromConstructor: true
     checkMissingIterableValueType: false

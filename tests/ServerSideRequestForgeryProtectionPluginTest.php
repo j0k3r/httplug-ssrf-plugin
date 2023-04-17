@@ -115,4 +115,39 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
 
         $client->sendRequest(new Request('GET', 'http://google.com'));
     }
+
+    public function testAsyncGet(): void
+    {
+        $mockClient = new Client();
+        $mockClient->addResponse(new Response(200));
+        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
+
+        $promise = $client->sendAsyncRequest(new Request('GET', 'http://www.google.com'))->then(
+            function ($response) {
+                $this->assertNotEmpty($response);
+                $this->assertSame(200, $response->getStatusCode());
+
+                // HTTPPlug requires that Response is always returned.
+                return $response;
+            }
+        )->wait();
+    }
+
+    public function testAsyncBlocked(): void
+    {
+        $url = 'http://0.0.0.0:123';
+        $message = 'Provided port "123" doesn\'t match whitelisted values: 80, 443, 8080';
+
+        $mockClient = new Client();
+        $mockClient->addResponse(new Response(200));
+        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
+
+        $promise = $client->sendAsyncRequest(new Request('GET', $url));
+
+        // The exception should only be thrown when calling `wait()`.
+        $this->expectException(RequestException::class);
+        $this->expectExceptionMessage($message);
+
+        $promise->wait();
+    }
 }

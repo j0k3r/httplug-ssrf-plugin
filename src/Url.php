@@ -25,7 +25,7 @@ class Url
             throw new InvalidURLException('Provided URL "' . $url . '" cannot be empty');
         }
 
-        //Split URL into parts first
+        // Split URL into parts first
         $parts = parse_url($url);
 
         if (empty($parts)) {
@@ -36,7 +36,7 @@ class Url
             throw new InvalidURLException('Provided URL "' . $url . '" doesn\'t contain a hostname');
         }
 
-        //If credentials are passed in, but we don't want them, raise an exception
+        // If credentials are passed in, but we don't want them, raise an exception
         if (!$options->getSendCredentials() && (!empty($parts['user']) || !empty($parts['pass']))) {
             throw new InvalidURLException('Credentials passed in but "sendCredentials" is set to false');
         }
@@ -47,21 +47,21 @@ class Url
 
         $parts['scheme'] = self::validateScheme($parts['scheme'], $options);
 
-        //Validate the port
+        // Validate the port
         if (isset($parts['port'])) {
             $parts['port'] = self::validatePort($parts['port'], $options);
         }
 
-        //Validate the host
+        // Validate the host
         $host = self::validateHost($parts['host'], $options);
         $parts['host'] = $host['host'];
         if ($options->getPinDns()) {
-            //Since we're pinning DNS, we replace the host in the URL
-            //with an IP, then get cURL to send the Host header
+            // Since we're pinning DNS, we replace the host in the URL
+            // with an IP, then get cURL to send the Host header
             $parts['host'] = $host['ips'][0];
         }
 
-        //Rebuild the URL
+        // Rebuild the URL
         $url = self::buildUrl($parts);
 
         return [
@@ -84,7 +84,7 @@ class Url
     {
         $scheme = strtolower($scheme);
 
-        //Whitelist always takes precedence over a blacklist
+        // Whitelist always takes precedence over a blacklist
         if (!$options->isInList('whitelist', 'scheme', $scheme)) {
             throw new InvalidSchemeException('Provided scheme "' . $scheme . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList('whitelist', 'scheme')));
         }
@@ -93,7 +93,7 @@ class Url
             throw new InvalidSchemeException('Provided scheme "' . $scheme . '" matches a blacklisted value');
         }
 
-        //Existing value is fine
+        // Existing value is fine
         return $scheme;
     }
 
@@ -117,7 +117,7 @@ class Url
             throw new InvalidPortException('Provided port "' . $port . '" matches a blacklisted value');
         }
 
-        //Existing value is fine
+        // Existing value is fine
         return $port;
     }
 
@@ -135,7 +135,7 @@ class Url
     {
         $host = strtolower($host);
 
-        //Check the host against the domain lists
+        // Check the host against the domain lists
         if (!$options->isInList('whitelist', 'domain', $host)) {
             throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t match whitelisted values: ' . implode(', ', $options->getList('whitelist', 'domain')));
         }
@@ -144,7 +144,7 @@ class Url
             throw new InvalidDomainException('Provided host "' . $host . '" matches a blacklisted value');
         }
 
-        //Now resolve to an IP and check against the IP lists
+        // Now resolve to an IP and check against the IP lists
         $ips = @gethostbynamel($host);
         if (empty($ips)) {
             throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t resolve to an IP address');
@@ -201,7 +201,7 @@ class Url
         $url .= !empty($parts['scheme']) ? $parts['scheme'] . '://' : '';
         $url .= !empty($parts['user']) ? $parts['user'] : '';
         $url .= !empty($parts['pass']) ? ':' . $parts['pass'] : '';
-        //If we have a user or pass, make sure to add an "@"
+        // If we have a user or pass, make sure to add an "@"
         $url .= !empty($parts['user']) || !empty($parts['pass']) ? '@' : '';
         $url .= !empty($parts['host']) ? $parts['host'] : '';
         $url .= !empty($parts['port']) ? ':' . $parts['port'] : '';
@@ -224,7 +224,7 @@ class Url
     public static function cidrMatch($ip, $cidr)
     {
         if (false === strpos($cidr, '/')) {
-            //It doesn't have a prefix, just a straight IP match
+            // It doesn't have a prefix, just a straight IP match
             return $ip === $cidr;
         }
 

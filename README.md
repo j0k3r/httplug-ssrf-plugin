@@ -1,10 +1,9 @@
 # Server-Side Request Forgery (SSRF) protection plugin for HTTPlug
 
-[![Build Status](https://travis-ci.org/j0k3r/httplug-ssrf-plugin.svg?branch=master)](https://travis-ci.org/j0k3r/httplug-ssrf-plugin)
-[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/httplug-ssrf-plugin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/httplug-ssrf-plugin/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/httplug-ssrf-plugin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/httplug-ssrf-plugin/?branch=master)
+![CI](https://github.com/j0k3r/httplug-ssrf-plugin/workflows/CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/j0k3r/httplug-ssrf-plugin/badge.svg?branch=master&service=github)](https://coveralls.io/github/j0k3r/httplug-ssrf-plugin?branch=master)
 
-Inspired from [SafeCurl](https://github.com/j0k3r/safecurl), it intends to validate each part of the URL against a white or black list, to help protect against _Server-Side Request Forgery_ attacks when using [HTTPlug](http://docs.php-http.org/en/latest/).
+Inspired from [SafeCurl](https://github.com/j0k3r/safecurl), it intends to validate each part of the URL against a white or black list, to help protect against _Server-Side Request Forgery_ attacks when using [HTTPlug](https://docs.php-http.org/en/latest/).
 
 Each part of the URL is broken down and validated against a white or black list. This includes resolve a domain name to it's IP addresses.
 
@@ -35,7 +34,7 @@ The plugin throws a `Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\
 
 #### Options
 
-The default options are to not allow access to any [private IP addresses](http://en.wikipedia.org/wiki/Private_network), and to only allow HTTP(S) connections.
+The default options are to not allow access to any [private IP addresses](https://en.wikipedia.org/wiki/Private_network), and to only allow HTTP(S) connections.
 
 If you wish to add your own options (such as to blacklist any requests to domains your control), simply get a new `Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options` object, add to the white or black lists, and pass it along with the method calls.
 
@@ -57,7 +56,7 @@ $pluginClient = new PluginClient(
 );
 
 // This will throw an Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidURLException\InvalidDomainException
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'http://www.example.com');
+$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.example.com');
 $response = $pluginClient->sendRequest($request);
 
 $options = new Options();
@@ -73,7 +72,7 @@ $request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.ex
 $response = $pluginClient->sendRequest($request);
 
 // This will throw an Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidURLException\InvalidDomainException
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'http://www.example.com');
+$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.example.com');
 $response = $pluginClient->sendRequest($request);
 ```
 
@@ -105,10 +104,10 @@ $pluginClient = new PluginClient(
     HttpClientDiscovery::find(),
     [new ServerSideRequestForgeryProtectionPlugin($options)]
 );
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'http://user:pass@google.com');
+$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://user:pass@google.com');
 $response = $pluginClient->sendRequest($request);
 ```
 
 #### Cavets
 
-Since the libray uses [`gethostbynamel`](http://php.net/manual/en/function.gethostbynamel.php) to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment.
+Since the libray uses [`gethostbynamel`](https://php.net/manual/en/function.gethostbynamel.php) to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment.
