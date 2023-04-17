@@ -6,19 +6,25 @@ namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\ServerSideRequestForgeryProtectionPlugin;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Http\Client\Common\Plugin\RedirectPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\Exception\RequestException;
-use Http\Mock\Client;
 
 class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet(): void
     {
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
 
         $response = $client->sendRequest(new Request('GET', 'http://www.google.com'));
@@ -55,8 +61,12 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $this->expectException(RequestException::class);
         $this->expectExceptionMessage($message);
 
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
 
         $client->sendRequest(new Request('GET', $url));
@@ -86,8 +96,12 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $options->addToList(Options::LIST_WHITELIST, 'scheme', 'ftp');
         $options->disableSendCredentials();
 
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin($options)]);
 
         $client->sendRequest(new Request('GET', $url));
@@ -98,8 +112,12 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $options = new Options();
         $options->enablePinDns();
 
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin($options)]);
 
         $response = $client->sendRequest(new Request('GET', 'http://google.com'));
@@ -113,9 +131,13 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $this->expectExceptionMessage('Provided port "123" doesn\'t match whitelisted values: 80, 443, 8080');
 
         $options = new Options();
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(301, ['Location' => 'http://0.0.0.0:123/']));
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(301, ['Location' => 'http://0.0.0.0:123/']),
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [
             new ServerSideRequestForgeryProtectionPlugin($options),
             new RedirectPlugin(),
@@ -126,8 +148,12 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
 
     public function testAsyncGet(): void
     {
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
 
         $promise = $client->sendAsyncRequest(new Request('GET', 'http://www.google.com'))->then(
@@ -146,8 +172,12 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $url = 'http://0.0.0.0:123';
         $message = 'Provided port "123" doesn\'t match whitelisted values: 80, 443, 8080';
 
-        $mockClient = new Client();
-        $mockClient->addResponse(new Response(200));
+        $mockHandler = new MockHandler([
+            new Response(200),
+        ]);
+        $mockClient = new Client([
+            'handler' => HandlerStack::create($mockHandler),
+        ]);
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
 
         $promise = $client->sendAsyncRequest(new Request('GET', $url));

@@ -30,9 +30,9 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.16",
+        "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/psr7": "^2.0",
         "php-http/guzzle7-adapter": "^1.0",
-        "php-http/mock-client": "^1.5",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-phpunit": "^1.3",
