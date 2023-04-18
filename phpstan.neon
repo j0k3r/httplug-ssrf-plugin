@@ -1,5 +1,5 @@
 parameters:
-    level: 7
+    level: max
     paths:
         - src
         - tests
@@ -7,9 +7,12 @@ parameters:
     bootstrapFiles:
         - vendor/bin/.phpunit/phpunit/vendor/autoload.php
 
-    inferPrivatePropertyTypeFromConstructor: true
-    checkMissingIterableValueType: false
-
     ignoreErrors:
         # Fix PHPUnit\Framework\TestCase::expectException() custom typehint
         - '#class\-string\<Throwable\>#'
+
+        # Tests try to pass invalid value since PHPDoc annotation cannot really enforce it.
+        - '(expects array<int\|string>\|int\|string, object\{dummy: bool\}&stdClass given\.)'
+        - '(expects .blacklist.\|.whitelist., .noo. given\.)'
+        - '(expects .domain.\|.ip.\|.port.\|.scheme., .noo. given\.)'
+        - '(expects .domain.\|.ip.\|.port.\|.scheme.\|null, .noo. given\.)'

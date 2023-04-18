@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidURLException;
@@ -12,6 +14,9 @@ use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Url;
 
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @return array<array{string, class-string<\Exception>, string}>
+     */
     public function dataForValidate(): array
     {
         return [
@@ -44,7 +49,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Provided scheme "http" matches a blacklisted value');
 
         $options = new Options();
-        $options->addToList('blacklist', 'scheme', 'http');
+        $options->addToList(Options::LIST_BLACKLIST, Options::TYPE_SCHEME, 'http');
 
         Url::validateUrl('http://www.fin1te.net', $options);
     }
@@ -55,7 +60,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Provided port "8080" matches a blacklisted value');
 
         $options = new Options();
-        $options->addToList('blacklist', 'port', '8080');
+        $options->addToList(Options::LIST_BLACKLIST, Options::TYPE_PORT, '8080');
 
         Url::validateUrl('http://www.fin1te.net:8080', $options);
     }
@@ -66,7 +71,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Provided host "www.fin1te.net" matches a blacklisted value');
 
         $options = new Options();
-        $options->addToList('blacklist', 'domain', '(.*)\.fin1te\.net');
+        $options->addToList(Options::LIST_BLACKLIST, Options::TYPE_DOMAIN, '(.*)\.fin1te\.net');
 
         Url::validateUrl('http://www.fin1te.net', $options);
     }
@@ -77,7 +82,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Provided host "www.google.fr" doesn\'t match whitelisted values: (.*)\.fin1te\.net');
 
         $options = new Options();
-        $options->addToList('whitelist', 'domain', '(.*)\.fin1te\.net');
+        $options->addToList(Options::LIST_WHITELIST, Options::TYPE_DOMAIN, '(.*)\.fin1te\.net');
 
         Url::validateUrl('http://www.google.fr', $options);
     }
@@ -98,7 +103,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Provided host "2.2.2.2" resolves to "2.2.2.2", which doesn\'t match whitelisted values: 1.1.1.1');
 
         $options = new Options();
-        $options->addToList('whitelist', 'ip', '1.1.1.1');
+        $options->addToList(Options::LIST_WHITELIST, Options::TYPE_IP, '1.1.1.1');
 
         Url::validateUrl('http://2.2.2.2', $options);
     }
@@ -106,7 +111,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     public function testValidateHostWithWhitelistIpOk(): void
     {
         $options = new Options();
-        $options->addToList('whitelist', 'ip', '1.1.1.1');
+        $options->addToList(Options::LIST_WHITELIST, Options::TYPE_IP, '1.1.1.1');
 
         $res = Url::validateUrl('http://1.1.1.1', $options);
 
@@ -123,7 +128,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Provided host "1.1.1.1" resolves to "1.1.1.1", which matches a blacklisted value: 1.1.1.1');
 
         $options = new Options();
-        $options->addToList('blacklist', 'ip', '1.1.1.1');
+        $options->addToList(Options::LIST_BLACKLIST, Options::TYPE_IP, '1.1.1.1');
 
         Url::validateUrl('http://1.1.1.1', $options);
     }

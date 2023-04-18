@@ -20,12 +20,12 @@ composer require j0k3r/httplug-ssrf-plugin
 ```php
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\ServerSideRequestForgeryProtectionPlugin;
 use Http\Client\Common\PluginClient;
-use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 
 $ssrfPlugin = new ServerSideRequestForgeryProtectionPlugin();
 
 $pluginClient = new PluginClient(
-    HttpClientDiscovery::find(),
+    Psr18ClientDiscovery::find(),
     [$ssrfPlugin]
 );
 ```
@@ -43,36 +43,36 @@ Domains are express using regex syntax, whilst IPs, scheme and ports are standar
 ```php
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\ServerSideRequestForgeryProtectionPlugin;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Client\Common\PluginClient;
 
 $options = new Options();
-$options->addToList('blacklist', 'domain', '(.*)\.example\.com');
+$options->addToList(Options::LIST_BLACKLIST, Options::TYPE_DOMAIN, '(.*)\.example\.com');
 
 $pluginClient = new PluginClient(
-    HttpClientDiscovery::find(),
+    Psr18ClientDiscovery::find(),
     [new ServerSideRequestForgeryProtectionPlugin($options)]
 );
 
 // This will throw an Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidURLException\InvalidDomainException
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.example.com');
+$request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'https://www.example.com');
 $response = $pluginClient->sendRequest($request);
 
 $options = new Options();
-$options->setList('whitelist', ['scheme' => ['https']]);
+$options->setList(Options::LIST_WHITELIST, [Options::TYPE_SCHEME => ['https']]);
 
 $pluginClient = new PluginClient(
-    HttpClientDiscovery::find(),
+    Psr18ClientDiscovery::find(),
     [new ServerSideRequestForgeryProtectionPlugin($options)]
 );
 
 // This will be allowed, and return the response
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.example.com');
+$request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'https://www.example.com');
 $response = $pluginClient->sendRequest($request);
 
 // This will throw an Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidURLException\InvalidDomainException
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://www.example.com');
+$request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'https://www.example.com');
 $response = $pluginClient->sendRequest($request);
 ```
 
@@ -92,8 +92,8 @@ The second disables the use of credentials in a URL, since PHP's `parse_url` ret
 ```php
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\ServerSideRequestForgeryProtectionPlugin;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Client\Common\PluginClient;
 
 $options = new Options();
@@ -101,10 +101,10 @@ $options->disableSendCredentials();
 
 //This will throw an Http\Client\Exception\RequestException
 $pluginClient = new PluginClient(
-    HttpClientDiscovery::find(),
+    Psr18ClientDiscovery::find(),
     [new ServerSideRequestForgeryProtectionPlugin($options)]
 );
-$request = MessageFactoryDiscovery::find()->createRequest('GET', 'https://user:pass@google.com');
+$request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'https://user:pass@google.com');
 $response = $pluginClient->sendRequest($request);
 ```
 
