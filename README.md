@@ -108,6 +108,6 @@ $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', 'ht
 $response = $pluginClient->sendRequest($request);
 ```
 
-#### Cavets
+#### Caveats
 
 Since the libray uses [`gethostbynamel`](https://php.net/manual/en/function.gethostbynamel.php) to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment.
