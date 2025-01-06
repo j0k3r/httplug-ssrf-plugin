@@ -173,7 +173,7 @@ class Options
      *
      * @return ($type is null ? array{ip: string[], port: string[], domain: string[], scheme: string[]} : string[])
      */
-    public function getList(string $listName, string $type = null): array
+    public function getList(string $listName, ?string $type = null): array
     {
         $this->checkListByName($listName);
 
@@ -193,9 +193,9 @@ class Options
      *
      * @template T of ?self::TYPE_*
      *
-     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
+     * @param self::LIST_*                                                                                                                                         $listName Accepts 'whitelist' or 'blacklist
      * @param (T is null ? array{ip?: string[], port?: (string|int)[], domain?: string[], scheme?: string[]} : (T is self::TYPE_PORT ? (string|int)[] : string[])) $values
-     * @param T $type
+     * @param T                                                                                                                                                    $type
      *
      * @throws InvalidOptionException
      */
@@ -253,8 +253,8 @@ class Options
      *
      * @template T of self::TYPE_*
      *
-     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
-     * @param T            $type
+     * @param self::LIST_*                                                         $listName Accepts 'whitelist' or 'blacklist
+     * @param T                                                                    $type
      * @param (T is self::TYPE_PORT ? (string|int)[]|string|int : string[]|string) $values
      *
      * @throws InvalidOptionException
@@ -296,8 +296,8 @@ class Options
      *
      * @template T of self::TYPE_*
      *
-     * @param self::LIST_* $listName Accepts 'whitelist' or 'blacklist
-     * @param T            $type
+     * @param self::LIST_*                                                         $listName Accepts 'whitelist' or 'blacklist
+     * @param T                                                                    $type
      * @param (T is self::TYPE_PORT ? (string|int)[]|string|int : string[]|string) $values
      *
      * @throws InvalidOptionException

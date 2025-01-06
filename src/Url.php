@@ -157,7 +157,7 @@ class Url
             }
 
             if (!$valid) {
-                throw new InvalidIpException('Provided host "' . $host . '" resolves to "' . implode(', ', $ips) . '", which doesn\'t match whitelisted values: ' . implode(', ', $whitelistedIps));
+                throw new InvalidIPException('Provided host "' . $host . '" resolves to "' . implode(', ', $ips) . '", which doesn\'t match whitelisted values: ' . implode(', ', $whitelistedIps));
             }
         }
 
@@ -167,7 +167,7 @@ class Url
             foreach ($blacklistedIps as $blacklistedIp) {
                 foreach ($ips as $ip) {
                     if (self::cidrMatch($ip, $blacklistedIp)) {
-                        throw new InvalidIpException('Provided host "' . $host . '" resolves to "' . implode(', ', $ips) . '", which matches a blacklisted value: ' . $blacklistedIp);
+                        throw new InvalidIPException('Provided host "' . $host . '" resolves to "' . implode(', ', $ips) . '", which matches a blacklisted value: ' . $blacklistedIp);
                     }
                 }
             }
@@ -208,7 +208,7 @@ class Url
      */
     public static function cidrMatch(string $ip, string $cidr): bool
     {
-        if (false === strpos($cidr, '/')) {
+        if (!str_contains($cidr, '/')) {
             // It doesn't have a prefix, just a straight IP match
             return $ip === $cidr;
         }

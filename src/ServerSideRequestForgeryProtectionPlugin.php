@@ -25,7 +25,7 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
     private Options $options;
     private UriFactoryInterface $uriFactory;
 
-    public function __construct(Options $options = null, UriFactoryInterface $uriFactory = null)
+    public function __construct(?Options $options = null, ?UriFactoryInterface $uriFactory = null)
     {
         $this->options = $options ?: new Options();
         $this->uriFactory = $uriFactory ?: Psr17FactoryDiscovery::findUriFactory();

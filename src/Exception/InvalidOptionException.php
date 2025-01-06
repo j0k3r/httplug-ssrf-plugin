@@ -16,7 +16,7 @@ final class InvalidOptionException extends \Exception implements SsrfException
         $expectedTypesList = '"' . implode('", "', \array_slice($expectedTypes, 0, -1))
             . '" or "' . $expectedTypes[\count($expectedTypes) - 1] . '"';
 
-        return new static(sprintf('Provided type "%s" must be %s', $type, $expectedTypesList));
+        return new static(\sprintf('Provided type "%s" must be %s', $type, $expectedTypesList));
     }
 
     /**
@@ -24,7 +24,7 @@ final class InvalidOptionException extends \Exception implements SsrfException
      */
     public static function invalidListName(string $listName): self
     {
-        return new static(sprintf('Provided list "%s" must be "whitelist" or "blacklist"', $listName));
+        return new static(\sprintf('Provided list "%s" must be "whitelist" or "blacklist"', $listName));
     }
 
     public static function emptyValues(): self

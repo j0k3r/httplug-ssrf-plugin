@@ -4,6 +4,8 @@ parameters:
         - src
         - tests
 
+    treatPhpDocTypesAsCertain: false
+
     bootstrapFiles:
         - vendor/bin/.phpunit/phpunit/vendor/autoload.php
 
