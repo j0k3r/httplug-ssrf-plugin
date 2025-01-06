@@ -14,6 +14,7 @@ use GuzzleHttp\Psr7\Response;
 use Http\Client\Common\Plugin\RedirectPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 
 class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\TestCase
 {
@@ -157,7 +158,7 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
 
         $promise = $client->sendAsyncRequest(new Request('GET', 'http://www.google.com'))->then(
-            function ($response) {
+            function (ResponseInterface $response) {
                 $this->assertNotEmpty($response);
                 $this->assertSame(200, $response->getStatusCode());
 
