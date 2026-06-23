@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception;
 
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Exception\InvalidOptionException;

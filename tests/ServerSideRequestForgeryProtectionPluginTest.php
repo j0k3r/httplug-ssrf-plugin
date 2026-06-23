@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
