@@ -17,8 +17,12 @@ class Url
      *
      * @return array{url: string, host: string, ips: string[]}
      */
-    public static function validateUrl(string $url, Options $options): array
+    public static function validateUrl(string $url, Options $options, ?NameResolver $resolver = null): array
     {
+        if (null === $resolver) {
+            $resolver = new NativeNameResolver();
+        }
+
         if ('' === trim($url)) {
             throw new InvalidURLException('Provided URL "' . $url . '" cannot be empty');
         }
@@ -51,7 +55,7 @@ class Url
         }
 
         // Validate the host
-        $host = self::validateHost($parts['host'], $options);
+        $host = self::validateHost($parts['host'], $options, $resolver);
         $parts['host'] = $host['host'];
         if ($options->getPinDns()) {
             // Since we're pinning DNS, we replace the host in the URL
@@ -121,8 +125,12 @@ class Url
      *
      * @return array{host: string, ips: string[]}
      */
-    public static function validateHost(string $host, Options $options): array
+    public static function validateHost(string $host, Options $options, ?NameResolver $resolver = null): array
     {
+        if (null === $resolver) {
+            $resolver = new NativeNameResolver();
+        }
+
         $host = strtolower($host);
 
         // Check the host against the domain lists
@@ -135,8 +143,8 @@ class Url
         }
 
         // Now resolve to an IP and check against the IP lists
-        $ips = @gethostbynamel($host);
-        if (empty($ips)) {
+        $ips = $resolver->resolve($host);
+        if ([] === $ips) {
             throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t resolve to an IP address');
         }
 
