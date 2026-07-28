@@ -49,7 +49,7 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
         $uri = $this->uriFactory->createUri($urlData['url']);
 
         if ((string) $uri !== (string) $request->getUri()) {
-            $request = $request->withUri($uri->withHost($urlData['host']));
+            $request = $request->withUri($uri, true);
         }
 
         return $next($request);
