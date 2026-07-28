@@ -22,11 +22,16 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
 {
     private Options $options;
     private UriFactoryInterface $uriFactory;
+    private NameResolver $resolver;
 
-    public function __construct(?Options $options = null, ?UriFactoryInterface $uriFactory = null)
-    {
+    public function __construct(
+        ?Options $options = null,
+        ?UriFactoryInterface $uriFactory = null,
+        ?NameResolver $resolver = null
+    ) {
         $this->options = $options ?: new Options();
         $this->uriFactory = $uriFactory ?: Psr17FactoryDiscovery::findUriFactory();
+        $this->resolver = $resolver ?? new NativeNameResolver();
     }
 
     /**
@@ -36,7 +41,7 @@ class ServerSideRequestForgeryProtectionPlugin implements Plugin
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
         try {
-            $urlData = Url::validateUrl((string) $request->getUri(), $this->options);
+            $urlData = Url::validateUrl((string) $request->getUri(), $this->options, $this->resolver);
         } catch (InvalidURLException $e) {
             return new HttpRejectedPromise(new RequestException($e->getMessage(), $request, $e));
         }
