@@ -2,6 +2,7 @@
 
 namespace Tests\Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection;
 
+use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\MockNameResolver;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\Options;
 use Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection\ServerSideRequestForgeryProtectionPlugin;
 use GuzzleHttp\Client;
@@ -9,12 +10,16 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Http\Client\Common\Plugin;
 use Http\Client\Common\Plugin\RedirectPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\Exception\RequestException;
+use Http\Promise\Promise;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\TestCase
+class ServerSideRequestForgeryProtectionPluginTest extends TestCase
 {
     public function testGet(): void
     {
@@ -111,13 +116,45 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $options = new Options();
         $options->enablePinDns();
 
+        $mockResolver = new MockNameResolver([
+            'google.com' => '1.2.3.4',
+        ]);
+
         $mockHandler = new MockHandler([
             new Response(200),
         ]);
         $mockClient = new Client([
             'handler' => HandlerStack::create($mockHandler),
         ]);
-        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin($options)]);
+        $client = new PluginClient(
+            $mockClient,
+            [
+                new ServerSideRequestForgeryProtectionPlugin($options, null, $mockResolver),
+                new class($this) implements Plugin {
+                    private TestCase $test;
+
+                    public function __construct(TestCase $test)
+                    {
+                        $this->test = $test;
+                    }
+
+                    /**
+                     * @param callable(RequestInterface): Promise $next
+                     * @param callable(RequestInterface): Promise $first
+                     */
+                    public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
+                    {
+                        $uri = (string) $request->getUri();
+                        $this->test->assertSame('http://1.2.3.4', $uri, 'IP has not been pinned');
+
+                        $host = $request->getHeaderLine('Host');
+                        $this->test->assertSame('google.com', $host, 'Host header has not been updated');
+
+                        return $next($request);
+                    }
+                },
+            ]
+        );
 
         $response = $client->sendRequest(new Request('GET', 'http://google.com'));
 
