@@ -131,7 +131,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     {
         $list = $this->options->getList(Options::LIST_BLACKLIST, Options::TYPE_IP);
 
-        $this->assertCount(15, $list);
+        $this->assertCount(31, $list);
         $this->assertSame('0.0.0.0/8', $list[0]);
 
         $this->options->addToList(Options::LIST_BLACKLIST, Options::TYPE_PORT, 8080);

@@ -92,7 +92,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $options = new Options();
 
-        Url::validateUrl('http://www.youpi.boom', $options);
+        Url::validateUrl('http://www.youpi.boom', $options, new MockNameResolver([]));
     }
 
     public function testValidateHostWithWhitelistIp(): void
@@ -136,7 +136,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $options = new Options();
         $options->enablePinDns();
 
-        $res = Url::validateUrl('https://bandito.re:8080', $options);
+        $resolver = new MockNameResolver([
+            'bandito.re' => '185.189.156.15',
+            'www.fin1te.net' => '1.1.1.1',
+        ]);
+        $res = Url::validateUrl('https://bandito.re:8080', $options, $resolver);
 
         $this->assertCount(3, $res);
         $this->assertArrayHasKey('url', $res);
@@ -146,7 +150,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('https://185.189.156.15:8080', $res['url']);
         $this->assertSame('bandito.re', $res['host']);
 
-        $res = Url::validateUrl('http://www.fin1te.net:8080', new Options());
+        $res = Url::validateUrl('http://www.fin1te.net:8080', new Options(), $resolver);
 
         $this->assertCount(3, $res);
         $this->assertArrayHasKey('url', $res);

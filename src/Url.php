@@ -17,8 +17,12 @@ class Url
      *
      * @return array{url: string, host: string, ips: string[]}
      */
-    public static function validateUrl(string $url, Options $options): array
+    public static function validateUrl(string $url, Options $options, ?NameResolver $resolver = null): array
     {
+        if (null === $resolver) {
+            $resolver = new NativeNameResolver();
+        }
+
         if ('' === trim($url)) {
             throw new InvalidURLException('Provided URL "' . $url . '" cannot be empty');
         }
@@ -51,12 +55,13 @@ class Url
         }
 
         // Validate the host
-        $host = self::validateHost($parts['host'], $options);
+        $host = self::validateHost($parts['host'], $options, $resolver);
         $parts['host'] = $host['host'];
         if ($options->getPinDns()) {
             // Since we're pinning DNS, we replace the host in the URL
             // with an IP, then get cURL to send the Host header
-            $parts['host'] = $host['ips'][0];
+            $ip = $host['ips'][0];
+            $parts['host'] = str_contains($ip, ':') ? '[' . $ip . ']' : $ip;
         }
 
         // Rebuild the URL
@@ -121,8 +126,12 @@ class Url
      *
      * @return array{host: string, ips: string[]}
      */
-    public static function validateHost(string $host, Options $options): array
+    public static function validateHost(string $host, Options $options, ?NameResolver $resolver = null): array
     {
+        if (null === $resolver) {
+            $resolver = new NativeNameResolver();
+        }
+
         $host = strtolower($host);
 
         // Check the host against the domain lists
@@ -135,22 +144,27 @@ class Url
         }
 
         // Now resolve to an IP and check against the IP lists
-        $ips = @gethostbynamel($host);
-        if (empty($ips)) {
+        $ips = $resolver->resolve($host);
+        if ([] === $ips) {
             throw new InvalidDomainException('Provided host "' . $host . '" doesn\'t resolve to an IP address');
         }
 
         $whitelistedIps = $options->getList(Options::LIST_WHITELIST, Options::TYPE_IP);
 
-        if (!empty($whitelistedIps)) {
-            $valid = false;
+        foreach ($ips as $ip) {
+            if (false === filter_var($ip, \FILTER_VALIDATE_IP)) {
+                throw new InvalidIPException('Provided host "' . $host . '" resolves to an invalid IP address: ' . $ip);
+            }
 
+            if (empty($whitelistedIps)) {
+                continue;
+            }
+
+            $valid = false;
             foreach ($whitelistedIps as $whitelistedIp) {
-                foreach ($ips as $ip) {
-                    if (self::cidrMatch($ip, $whitelistedIp)) {
-                        $valid = true;
-                        break 2;
-                    }
+                if (self::cidrMatch($ip, $whitelistedIp)) {
+                    $valid = true;
+                    break;
                 }
             }
 
@@ -201,18 +215,35 @@ class Url
     }
 
     /**
-     * Checks a passed in IP against a CIDR.
-     * See http://stackoverflow.com/questions/594112/matching-an-ip-to-a-cidr-mask-in-php5.
+     * Checks an IPv4 or IPv6 address against an IP address or CIDR.
      */
     public static function cidrMatch(string $ip, string $cidr): bool
     {
-        if (!str_contains($cidr, '/')) {
-            // It doesn't have a prefix, just a straight IP match
-            return $ip === $cidr;
+        $parts = explode('/', $cidr, 2);
+        $address = @inet_pton($ip);
+        $subnet = @inet_pton($parts[0]);
+
+        if (false === $address || false === $subnet || \strlen($address) !== \strlen($subnet)) {
+            return false;
         }
 
-        list($subnet, $mask) = explode('/', $cidr);
+        $bits = \strlen($address) * 8;
+        $mask = isset($parts[1]) ? filter_var($parts[1], \FILTER_VALIDATE_INT, [
+            'options' => ['min_range' => 0, 'max_range' => $bits],
+        ]) : $bits;
 
-        return (ip2long($ip) & ~((1 << (32 - (int) $mask)) - 1)) === ip2long($subnet);
+        if (false === $mask) {
+            return false;
+        }
+
+        $bytes = intdiv($mask, 8);
+        if (substr($address, 0, $bytes) !== substr($subnet, 0, $bytes)) {
+            return false;
+        }
+
+        $remainingBits = $mask % 8;
+
+        return 0 === $remainingBits
+            || (\ord($address[$bytes]) >> (8 - $remainingBits)) === (\ord($subnet[$bytes]) >> (8 - $remainingBits));
     }
 }

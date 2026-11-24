@@ -24,7 +24,8 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $mockClient = new Client([
             'handler' => HandlerStack::create($mockHandler),
         ]);
-        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
+        $resolver = new MockNameResolver(['www.google.com' => '1.1.1.1']);
+        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin(null, null, $resolver)]);
 
         $response = $client->sendRequest(new Request('GET', 'http://www.google.com'));
 
@@ -117,7 +118,8 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $mockClient = new Client([
             'handler' => HandlerStack::create($mockHandler),
         ]);
-        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin($options)]);
+        $resolver = new MockNameResolver(['google.com' => '1.1.1.1']);
+        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin($options, null, $resolver)]);
 
         $response = $client->sendRequest(new Request('GET', 'http://google.com'));
 
@@ -137,8 +139,9 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $mockClient = new Client([
             'handler' => HandlerStack::create($mockHandler),
         ]);
+        $resolver = new MockNameResolver(['google.com' => '1.1.1.1']);
         $client = new PluginClient($mockClient, [
-            new ServerSideRequestForgeryProtectionPlugin($options),
+            new ServerSideRequestForgeryProtectionPlugin($options, null, $resolver),
             new RedirectPlugin(),
         ]);
 
@@ -153,7 +156,8 @@ class ServerSideRequestForgeryProtectionPluginTest extends \PHPUnit\Framework\Te
         $mockClient = new Client([
             'handler' => HandlerStack::create($mockHandler),
         ]);
-        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin()]);
+        $resolver = new MockNameResolver(['www.google.com' => '1.1.1.1']);
+        $client = new PluginClient($mockClient, [new ServerSideRequestForgeryProtectionPlugin(null, null, $resolver)]);
 
         $promise = $client->sendAsyncRequest(new Request('GET', 'http://www.google.com'))->then(
             function (ResponseInterface $response) {

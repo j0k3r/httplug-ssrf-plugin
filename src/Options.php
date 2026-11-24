@@ -62,6 +62,22 @@ class Options
                 '203.0.113.0/24',
                 '224.0.0.0/4',
                 '240.0.0.0/4',
+                '::/96', // Unspecified, loopback and IPv4-compatible addresses
+                '::ffff:0:0/96', // IPv4-mapped addresses
+                '64:ff9b::/96', // NAT64
+                '64:ff9b:1::/48', // Local-use NAT64
+                '100::/64', // Discard-only
+                '100:0:0:1::/64', // Dummy IPv6 prefix
+                '2001::/32', // Teredo
+                '2001:2::/48', // Benchmarking
+                '2001:db8::/32', // Documentation
+                '2002::/16', // 6to4
+                '3fff::/20', // Documentation
+                '5f00::/16', // Segment routing
+                'fc00::/7', // Unique local
+                'fe80::/10', // Link-local
+                'fec0::/10', // Deprecated site-local
+                'ff00::/8', // Multicast
             ],
             'port' => [],
             'domain' => [],

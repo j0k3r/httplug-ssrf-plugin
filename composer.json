@@ -22,6 +22,7 @@
     ],
     "require": {
         "php": ">=8.2",
+        "ext-sockets": "*",
         "php-http/client-common": "^2.6",
         "php-http/discovery": "^1.15",
         "php-http/message": "^1.13",

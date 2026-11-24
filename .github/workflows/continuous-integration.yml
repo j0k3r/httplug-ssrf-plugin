@@ -35,6 +35,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "none"
+          extensions: sockets
           tools: composer:v2
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,6 +66,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "pcov"
+          extensions: sockets
           tools: composer:v2
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,6 +111,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "none"
+          extensions: sockets
           tools: composer:v2
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}

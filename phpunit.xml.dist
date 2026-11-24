@@ -20,17 +20,4 @@
             <directory>./src</directory>
         </whitelist>
     </filter>
-
-    <listeners>
-        <!-- In order to mock if necessary the resolution IP of a non-existent domain name during the validation of url -->
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
-            <arguments>
-                <array>
-                    <element key="dns-sensitive">
-                        <string>Graby\HttpClient\Plugin\ServerSideRequestForgeryProtection</string>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
 </phpunit>
