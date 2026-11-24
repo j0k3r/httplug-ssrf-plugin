@@ -73,6 +73,22 @@ class UrlSecurityTest extends TestCase
         $this->assertSame('https://public.example:8080/path?query=1', $result['url']);
     }
 
+    public function testDefaultsToHttpWhenTheSchemeIsMissing(): void
+    {
+        $resolver = new MockNameResolver(['public.example' => '1.1.1.1']);
+        $result = Url::validateUrl('//public.example/path', new Options(), $resolver);
+
+        $this->assertSame('http://public.example/path', $result['url']);
+    }
+
+    public function testValidateHostUsesTheSystemResolverByDefault(): void
+    {
+        $result = Url::validateHost('[2606:4700:4700::1111]', new Options());
+
+        $this->assertSame('[2606:4700:4700::1111]', $result['host']);
+        $this->assertSame(['2606:4700:4700::1111'], $result['ips']);
+    }
+
     public function testAcceptsAnIpv6OnlyDomain(): void
     {
         $resolver = new MockNameResolver(['public.example' => ['2606:4700:4700::1111']]);
