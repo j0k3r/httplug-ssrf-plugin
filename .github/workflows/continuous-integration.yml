@@ -14,17 +14,15 @@ env:
 jobs:
   phpunit:
     name: "PHPUnit (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
         php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -49,12 +47,12 @@ jobs:
 
   phpunit-coverage:
     name: "PHPUnit coverage (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
         php:
-          - "7.4"
+          - "8.2"
 
     steps:
       - name: "Checkout"
@@ -93,12 +91,12 @@ jobs:
 
   phpunit-lowest:
     name: "PHPUnit lowest deps (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
         php:
-          - "7.4"
+          - "8.2"
 
     steps:
       - name: "Checkout"
